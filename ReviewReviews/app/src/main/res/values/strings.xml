@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">ReviewReviews</string>
+    <string name="app_name">Review Reviews</string>
+    <string name="contact">julianharty@gmail.com</string>
+    <string name="welcome">Welcome to this app.
+        It is part of my Ph.D Research meanwhile it might help me and others
+        improve the testing of Android apps using reviews on Google Play.\n
+
+        It includes a set of reviews for Kiwix apps so you can practice ways
+        to apply concepts and skills. Future editions of the app may have
+        facilities to import additional reviews.\n
+
+        The app incorporates analytics on how it is being used. These are an
+        integral part of the learning and research aspects of this project.
+    </string>
+    <string name="project_home">https://github.com/julianharty/app-store-reviews-app</string>
 </resources>
