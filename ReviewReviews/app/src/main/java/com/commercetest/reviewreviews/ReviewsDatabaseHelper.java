@@ -2,8 +2,11 @@ package com.commercetest.reviewreviews;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Code to manage the creation, update and initial population of the database.
@@ -95,6 +98,8 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         reviewValues.put("developer_reply_text", developerReplyText);
         reviewValues.put("review_link", reviewURL);
         db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
+        long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
+        Log.i("Review added", reviewTitle + ", count now: " + count);
     }
 
 }
