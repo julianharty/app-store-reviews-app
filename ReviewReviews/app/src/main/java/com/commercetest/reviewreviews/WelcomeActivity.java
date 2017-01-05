@@ -40,6 +40,12 @@ public class WelcomeActivity extends AppCompatActivity {
                     "My first review", "A great start for this new app - keep going!",
                     "", 0, "","");
         }
+
+        if (item.getItemId() == R.id.load_reviews) {
+            Log.i("LoadReviews", "Load Reviews requested");
+            // Launch activity.
+        }
+
         if (item.getItemId() == R.id.settings) {
             Log.i("Settings", "Settings requested");
         }

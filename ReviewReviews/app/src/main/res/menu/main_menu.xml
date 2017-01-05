@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/load_reviews"
+        android:title="Load Reviews"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/add_review"
         android:title="@string/add_review"
         app:showAsAction="ifRoom"
