@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,10 @@ public class ReviewReader {
 
   public static ReviewReader fromStream(InputStream stream) throws IOException {
     return new ReviewReader(new BufferedReader(new InputStreamReader(new BufferedInputStream(stream)))).index();
+  }
+
+  static ReviewReader fromStringReaderForTesting(StringReader contents) {
+    return new ReviewReader(new BufferedReader(contents));
   }
 
   public Review next() throws IOException {
