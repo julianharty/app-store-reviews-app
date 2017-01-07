@@ -16,24 +16,24 @@ import java.net.URL;
  */
 public class Review {
     // mandatory
-    private String packageName;
-    private String reviewSubmitted;
-    private int reviewSubmittedMillis;
-    private int rating;
+    private final String packageName;
+    private final String reviewSubmitted;
+    private final int reviewSubmittedMillis;
+    private final int rating;
 
     // optional
-    private int appVersionCode;
-    private String appVersionName;
-    private String reviewerLanguage;
-    private String device;
-    private String lastUpdated;
-    private int lastUpdatedMillis;
-    private String title;
-    private String reviewText;
-    private String developerReplied;
-    private int developerRepliedMillis;
-    private String developerReplyText;
-    private URL reviewLink;
+    private final int appVersionCode;
+    private final String appVersionName;
+    private final String reviewerLanguage;
+    private final String device;
+    private final String lastUpdated;
+    private final int lastUpdatedMillis;
+    private final String title;
+    private final String reviewText;
+    private final String developerReplied;
+    private final int developerRepliedMillis;
+    private final String developerReplyText;
+    private final URL reviewLink;
 
     public static class Builder {
         // mandatory in reviews from Google Play Developer Console
