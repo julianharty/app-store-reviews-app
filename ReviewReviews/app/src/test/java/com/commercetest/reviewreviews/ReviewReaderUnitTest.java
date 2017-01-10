@@ -5,9 +5,7 @@ import org.junit.Test;
 import java.io.StringReader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 /**
  * Created by julianharty_air on 07/01/2017.
