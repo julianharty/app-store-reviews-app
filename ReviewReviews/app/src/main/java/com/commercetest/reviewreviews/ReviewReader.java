@@ -63,13 +63,23 @@ public class ReviewReader {
     if (null == row) {
       return null;
     }
-    // TODO Map fields from the CSV header
-    return null; // Temporary hack to get unit tests to run :( new Review();
+    // TODO Map optional fields from the CSV header
+    // TODO Decide how to handle the milli-seconds they exceed the size of an int
+    final long reviewMillis = Long.parseLong(row[fields.get(REVIEW_MILLIS)]);
+    Review.Builder temp = new Review.Builder(
+            row[fields.get(PACKAGE_NAME)],
+            row[fields.get(REVIEW_DATE_TIME)],
+            123456,
+            Integer.parseInt(row[fields.get(STAR_RATING)]));
+    return temp.build();
   }
 
   ReviewReader index() throws IOException {
     String[] items = nextRow();
     index(PACKAGE_NAME, items);
+    index(REVIEW_DATE_TIME, items);
+    index(REVIEW_MILLIS, items);
+    index(STAR_RATING, items);
     return this;
   }
 

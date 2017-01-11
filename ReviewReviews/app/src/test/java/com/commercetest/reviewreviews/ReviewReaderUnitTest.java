@@ -37,7 +37,7 @@ public class ReviewReaderUnitTest {
                         "\r\n"
             ;
     @Test
-    public void create_review_from_sample_review_contents() throws Exception {
+    public void parse_review_contents_from_sample_review() throws Exception {
 
         final String MINI_FILE_CONTENTS = SAMPLE_REVIEW_HEADING + SAMPLE_REVIEW_ROW_1;
         StringReader review_file = new StringReader(MINI_FILE_CONTENTS);
@@ -48,5 +48,17 @@ public class ReviewReaderUnitTest {
         assertEquals("Expected the app's java package name", review1[0], "org.kiwix.kiwixmobile");
         assertNull("Didn't expect another review after the first review", reader.nextRow());
         // TODO 2016-01-07 (jharty) continue working on this test and the functionality.
+    }
+
+    @Test
+    public void create_review_from_sample_review() throws Exception {
+
+        final String MINI_FILE_CONTENTS = SAMPLE_REVIEW_HEADING + SAMPLE_REVIEW_ROW_1;
+        StringReader review_file = new StringReader(MINI_FILE_CONTENTS);
+        ReviewReader reader = ReviewReader.fromStringReaderForTesting(review_file);
+
+        reader = reader.index();
+        Review review = reader.next();
+
     }
 }
