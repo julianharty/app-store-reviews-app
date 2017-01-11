@@ -18,7 +18,7 @@ public class Review {
     // mandatory
     private final String packageName;
     private final String reviewSubmitted;
-    private final int reviewSubmittedMillis;
+    private final long reviewSubmittedMillis;
     private final int rating;
 
     // optional
@@ -27,11 +27,11 @@ public class Review {
     private final String reviewerLanguage;
     private final String device;
     private final String lastUpdated;
-    private final int lastUpdatedMillis;
+    private final long lastUpdatedMillis;
     private final String title;
     private final String reviewText;
     private final String developerReplied;
-    private final int developerRepliedMillis;
+    private final long developerRepliedMillis;
     private final String developerReplyText;
     private final URL reviewLink;
 
@@ -39,7 +39,7 @@ public class Review {
         // mandatory in reviews from Google Play Developer Console
         private String packageName;
         private String reviewSubmitted;
-        private int reviewSubmittedMillis;
+        private long reviewSubmittedMillis;
         private int rating;
 
         // optional in reviews from Google Play Developer Console
@@ -48,15 +48,15 @@ public class Review {
         private String reviewerLanguage;
         private String device;
         private String lastUpdated;
-        private int lastUpdatedMillis;
+        private long lastUpdatedMillis;
         private String title;
         private String reviewText;
         private String developerReplied;
-        private int developerRepliedMillis;
+        private long developerRepliedMillis;
         private String developerReplyText;
         private URL reviewLink;
 
-        public Builder(String packageName, String reviewSubmitted, int reviewSubmittedMillis, int rating) {
+        public Builder(String packageName, String reviewSubmitted, long reviewSubmittedMillis, int rating) {
             this.packageName = packageName;
             this.reviewSubmitted = reviewSubmitted;
             this.reviewSubmittedMillis = reviewSubmittedMillis;
@@ -88,7 +88,7 @@ public class Review {
             return this;
         }
 
-        public Builder lastUpdatedMillis(int lastUpdatedMillis) {
+        public Builder lastUpdatedMillis(long lastUpdatedMillis) {
             this.lastUpdatedMillis = lastUpdatedMillis;
             return this;
         }
@@ -108,7 +108,7 @@ public class Review {
             return this;
         }
 
-        public Builder developerRepliedMillis(int developerRepliedMillis) {
+        public Builder developerRepliedMillis(long developerRepliedMillis) {
             this.developerRepliedMillis = developerRepliedMillis;
             return this;
         }
@@ -155,7 +155,7 @@ public class Review {
         return reviewSubmitted;
     }
 
-    public int getReviewSubmittedMillis() {
+    public long getReviewSubmittedMillis() {
         return reviewSubmittedMillis;
     }
 
@@ -183,7 +183,7 @@ public class Review {
         return lastUpdated;
     }
 
-    public int getLastUpdatedMillis() {
+    public long getLastUpdatedMillis() {
         return lastUpdatedMillis;
     }
 
@@ -199,7 +199,7 @@ public class Review {
         return developerReplied;
     }
 
-    public int getDeveloperRepliedMillis() {
+    public long getDeveloperRepliedMillis() {
         return developerRepliedMillis;
     }
 

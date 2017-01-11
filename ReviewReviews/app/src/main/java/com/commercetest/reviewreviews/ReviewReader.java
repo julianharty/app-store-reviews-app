@@ -69,7 +69,7 @@ public class ReviewReader {
     Review.Builder temp = new Review.Builder(
             row[fields.get(PACKAGE_NAME)],
             row[fields.get(REVIEW_DATE_TIME)],
-            123456,
+            reviewMillis,
             Integer.parseInt(row[fields.get(STAR_RATING)]));
     return temp.build();
   }
