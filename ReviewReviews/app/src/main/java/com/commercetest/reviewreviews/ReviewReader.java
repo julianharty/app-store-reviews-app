@@ -48,7 +48,7 @@ public class ReviewReader {
   }
 
   public static ReviewReader fromStream(InputStream stream) throws IOException {
-    return new ReviewReader(new BufferedReader(new InputStreamReader(new BufferedInputStream(stream)))).index();
+    return new ReviewReader(new BufferedReader(new InputStreamReader(new BufferedInputStream(stream), "UTF-16"))).index();
   }
 
   static ReviewReader fromStringReaderForTesting(StringReader contents) {
@@ -64,7 +64,6 @@ public class ReviewReader {
       return null;
     }
     // TODO Map optional fields from the CSV header
-    // TODO Decide how to handle the milli-seconds they exceed the size of an int
     final long reviewMillis = Long.parseLong(row[fields.get(REVIEW_MILLIS)]);
     Review.Builder temp = new Review.Builder(
             row[fields.get(PACKAGE_NAME)],
