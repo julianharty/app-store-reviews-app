@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final int FIND_FILE_REQUEST_CODE = 8888;
+    private static final String TAG = "WelcomeActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.add_review) {
             Log.i("AddReview", "AddReview requested");
-            SQLiteOpenHelper reviewsDatabaseHelper = new ReviewsDatabaseHelper(this);
-            SQLiteDatabase db = reviewsDatabaseHelper.getWritableDatabase();
+            SQLiteDatabase db = getDatabase();
             int now = (int) System.currentTimeMillis();
             ReviewsDatabaseHelper.insertGooglePlayReview(
                     db, "org.julianharty.revieweviews",
@@ -59,6 +59,11 @@ public class WelcomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private SQLiteDatabase getDatabase() {
+        SQLiteOpenHelper reviewsDatabaseHelper = new ReviewsDatabaseHelper(this);
+        return reviewsDatabaseHelper.getWritableDatabase();
+    }
+
     public void findReviewsToLoad() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -76,17 +81,19 @@ public class WelcomeActivity extends AppCompatActivity {
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     ReviewReader r = ReviewReader.fromStream(inputStream);
-                    r = r.index();
-                    Review review = r.next();
-                    review.getPackageName();
+                    SQLiteDatabase db = getDatabase();
+                    Review review = null;
+                    while ((review = r.next()) != null) {
+                        ReviewsDatabaseHelper.insertGooglePlayReview(db, review);
+                    }
                 } catch (FileNotFoundException e) {
+                    Log.e(TAG, "Problem accessing file of reviews", e);
                     e.printStackTrace();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
+                } catch (IOException e) {
+                    Log.e(TAG, "Problem accessing file of reviews", e);
+                    e.printStackTrace();
                 }
-
             }
         }
     }
-
 }

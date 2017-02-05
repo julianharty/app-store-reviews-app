@@ -73,7 +73,7 @@ public class ReviewReader {
     return temp.build();
   }
 
-  ReviewReader index() throws IOException {
+  private ReviewReader index() throws IOException {
     String[] items = nextRow();
     index(PACKAGE_NAME, items);
     index(REVIEW_DATE_TIME, items);
@@ -82,7 +82,7 @@ public class ReviewReader {
     return this;
   }
 
-  void index(String name, String[] values) {
+  private void index(String name, String[] values) {
     for (int i = 0; i < values.length; i++) {
       if (values[i].equals(name)) {
         fields.put(name, i);
