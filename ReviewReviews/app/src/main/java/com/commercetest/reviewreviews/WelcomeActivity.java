@@ -78,12 +78,13 @@ public class WelcomeActivity extends AppCompatActivity {
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
+                int recordsAdded = 0;
+                int recordsRejected = 0;
+                String message;
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     ReviewReader r = ReviewReader.fromStream(inputStream);
                     SQLiteDatabase db = getDatabase();
-                    int recordsAdded = 0;
-                    int recordsRejected = 0;
                     Review review = null;
                     while ((review = r.next()) != null) {
                         boolean OK = ReviewsDatabaseHelper.insertGooglePlayReview(db, review);
@@ -97,10 +98,16 @@ public class WelcomeActivity extends AppCompatActivity {
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, "Problem accessing file of reviews", e);
                     e.printStackTrace();
+                    message = e.getLocalizedMessage();
                 } catch (IOException e) {
                     Log.e(TAG, "Problem accessing file of reviews", e);
                     e.printStackTrace();
+                    message = e.getLocalizedMessage();
                 }
+                message = String.format("%d|%d", recordsAdded, recordsRejected);
+                Intent showResults = new Intent(this, ShowResultsOfLoadingReviewsActivity.class);
+                showResults.putExtra(ShowResultsOfLoadingReviewsActivity.message, message);
+                startActivity(showResults);
             }
         }
     }

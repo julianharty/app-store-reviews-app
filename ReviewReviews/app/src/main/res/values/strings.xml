@@ -14,6 +14,7 @@
         integral part of the learning and research aspects of this project.
     </string>
     <string name="project_home">https://github.com/julianharty/app-store-reviews-app</string>
+    <string name="result_heading">Result</string>
     <string name="settings">Settings</string>
     <string name="triage">Triage Reviews</string>
     <string name="undo">Undo</string>
