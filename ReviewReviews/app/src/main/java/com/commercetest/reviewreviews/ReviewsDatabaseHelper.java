@@ -102,15 +102,22 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         Log.i("Review added", reviewTitle + ", count now: " + count);
     }
 
-    public static void insertGooglePlayReview(SQLiteDatabase db, Review review) {
+    /**
+     * insertGooglePlayReview
+     * @param db existing, writable connection to SQLite database
+     * @param review to add to the database
+     * @return true if the insert returned a row ID, else false
+     */
+    public static boolean insertGooglePlayReview(SQLiteDatabase db, Review review) {
         ContentValues reviewValues = new ContentValues();
         reviewValues.put("package", review.getPackageName());
         reviewValues.put("review_submitted", review.getReviewSubmitted());
         reviewValues.put("review_submitted_millis", review.getReviewSubmittedMillis());
         reviewValues.put("star_rating", review.getRating());
         // TODO add the optional parameters.
-        db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
+        final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        Log.i("Review added",  "Count now: " + count);
+        Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
+        return (rowId != -1);
     }
 }

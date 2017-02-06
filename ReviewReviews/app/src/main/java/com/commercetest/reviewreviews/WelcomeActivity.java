@@ -67,7 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public void findReviewsToLoad() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/*");
+        intent.setType("text/comma-separated-values");
         startActivityForResult(intent, FIND_FILE_REQUEST_CODE);
     }
 
@@ -82,10 +82,18 @@ public class WelcomeActivity extends AppCompatActivity {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     ReviewReader r = ReviewReader.fromStream(inputStream);
                     SQLiteDatabase db = getDatabase();
+                    int recordsAdded = 0;
+                    int recordsRejected = 0;
                     Review review = null;
                     while ((review = r.next()) != null) {
-                        ReviewsDatabaseHelper.insertGooglePlayReview(db, review);
+                        boolean OK = ReviewsDatabaseHelper.insertGooglePlayReview(db, review);
+                        if (OK) {
+                            recordsAdded++;
+                        } else {
+                            recordsRejected++;
+                        }
                     }
+                    Log.i(TAG, "Import completed, added:" + recordsAdded + ", rejected: " + recordsRejected);
                 } catch (FileNotFoundException e) {
                     Log.e(TAG, "Problem accessing file of reviews", e);
                     e.printStackTrace();
