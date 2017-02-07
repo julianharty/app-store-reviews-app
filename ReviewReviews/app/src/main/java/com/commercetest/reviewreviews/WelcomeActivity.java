@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 
 public class WelcomeActivity extends AppCompatActivity {
-    private static final int FIND_FILE_REQUEST_CODE = 8888;
     private static final String TAG = "WelcomeActivity";
 
     @Override
@@ -36,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.add_review) {
             Log.i("AddReview", "AddReview requested");
-            SQLiteDatabase db = getDatabase();
+            SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
             int now = (int) System.currentTimeMillis();
             ReviewsDatabaseHelper.insertGooglePlayReview(
                     db, "org.julianharty.revieweviews",
@@ -50,7 +49,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.load_reviews) {
             Log.i("LoadReviews", "Load Reviews requested");
-            findReviewsToLoad();
+            Intent intent = new Intent(this, LoadReviewsActivity.class);
+            startActivity(intent);
+            // findReviewsToLoad();
         }
 
         if (item.getItemId() == R.id.settings) {
@@ -59,56 +60,4 @@ public class WelcomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private SQLiteDatabase getDatabase() {
-        SQLiteOpenHelper reviewsDatabaseHelper = new ReviewsDatabaseHelper(this);
-        return reviewsDatabaseHelper.getWritableDatabase();
-    }
-
-    public void findReviewsToLoad() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/comma-separated-values");
-        startActivityForResult(intent, FIND_FILE_REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
-
-        if (requestCode == FIND_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = null;
-            if (resultData != null) {
-                uri = resultData.getData();
-                int recordsAdded = 0;
-                int recordsRejected = 0;
-                String message;
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(uri);
-                    ReviewReader r = ReviewReader.fromStream(inputStream);
-                    SQLiteDatabase db = getDatabase();
-                    Review review = null;
-                    while ((review = r.next()) != null) {
-                        boolean OK = ReviewsDatabaseHelper.insertGooglePlayReview(db, review);
-                        if (OK) {
-                            recordsAdded++;
-                        } else {
-                            recordsRejected++;
-                        }
-                    }
-                    Log.i(TAG, "Import completed, added:" + recordsAdded + ", rejected: " + recordsRejected);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "Problem accessing file of reviews", e);
-                    e.printStackTrace();
-                    message = e.getLocalizedMessage();
-                } catch (IOException e) {
-                    Log.e(TAG, "Problem accessing file of reviews", e);
-                    e.printStackTrace();
-                    message = e.getLocalizedMessage();
-                }
-                message = String.format("%d|%d", recordsAdded, recordsRejected);
-                Intent showResults = new Intent(this, ShowResultsOfLoadingReviewsActivity.class);
-                showResults.putExtra(ShowResultsOfLoadingReviewsActivity.message, message);
-                startActivity(showResults);
-            }
-        }
-    }
 }

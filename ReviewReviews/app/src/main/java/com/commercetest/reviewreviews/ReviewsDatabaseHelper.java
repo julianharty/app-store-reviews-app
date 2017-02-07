@@ -22,6 +22,12 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+
+    public static SQLiteDatabase getDatabase(Context context) {
+        SQLiteOpenHelper reviewsDatabaseHelper = new ReviewsDatabaseHelper(context);
+        return reviewsDatabaseHelper.getWritableDatabase();
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuilder sqlStatement = new StringBuilder();

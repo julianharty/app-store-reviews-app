@@ -13,6 +13,8 @@
         The app incorporates analytics on how it is being used. These are an
         integral part of the learning and research aspects of this project.
     </string>
+    <string name="loadButtonText">Find file to load</string>
+    <string name="loadAnotherFileText">Find another file to load</string>
     <string name="project_home">https://github.com/julianharty/app-store-reviews-app</string>
     <string name="result_heading">Result</string>
     <string name="settings">Settings</string>
