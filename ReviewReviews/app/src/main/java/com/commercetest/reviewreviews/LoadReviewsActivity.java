@@ -79,6 +79,10 @@ public class LoadReviewsActivity extends AppCompatActivity {
                     e.printStackTrace();
                     message = e.getLocalizedMessage();
                     messageBox.setText(message);
+                } catch (UnexpectedFormatException ufe) {
+                    Log.w(TAG, "Unexpected CSV file detected, possibly incorrect content", ufe);
+                    message = ufe.getLocalizedMessage();
+                    messageBox.setText(message);
                 }
             }
         }

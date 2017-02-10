@@ -43,11 +43,11 @@ public class ReviewReader {
   }
 
   public static ReviewReader fromFilename(String filename)
-      throws IOException {
+      throws IOException, UnexpectedFormatException {
     return fromStream(new FileInputStream(filename));
   }
 
-  public static ReviewReader fromStream(InputStream stream) throws IOException {
+  public static ReviewReader fromStream(InputStream stream) throws IOException, UnexpectedFormatException {
     return new ReviewReader(new BufferedReader(new InputStreamReader(new BufferedInputStream(stream), "UTF-16"))).index();
   }
 
@@ -73,22 +73,43 @@ public class ReviewReader {
     return temp.build();
   }
 
-  private ReviewReader index() throws IOException {
+  private ReviewReader index() throws IOException, UnexpectedFormatException {
     String[] items = nextRow();
-    index(PACKAGE_NAME, items);
-    index(REVIEW_DATE_TIME, items);
-    index(REVIEW_MILLIS, items);
-    index(STAR_RATING, items);
+    findOrDie(PACKAGE_NAME, items);
+    findOrDie(REVIEW_DATE_TIME, items);
+    findOrDie(REVIEW_MILLIS, items);
+    findOrDie(STAR_RATING, items);
     return this;
   }
 
-  private void index(String name, String[] values) {
+  /**
+   * findOrDie a column heading in the set of values read from the input.
+   *
+   * Note: this is an experimental approach, coded to try it out.
+   * @param expected column heading
+   * @param values all headings read from input
+   * @throws UnexpectedFormatException
+     */
+  private void findOrDie(String expected, String[] values) throws UnexpectedFormatException {
+    if (index(expected, values) == -1) {
+      throw new UnexpectedFormatException(expected, values);
+    }
+  }
+
+  /**
+   * Find the column index for expected column headings
+   * @param name the name of the column heading to find the index of
+   * @param values the set of column headings (typically read from a csv file)
+   * @return the column index if a match is found, else -1
+     */
+  private int index(String name, String[] values) {
     for (int i = 0; i < values.length; i++) {
       if (values[i].equals(name)) {
         fields.put(name, i);
-        return;
+        return i;
       }
     }
+    return -1;
   }
 
   String[] nextRow() throws IOException {
