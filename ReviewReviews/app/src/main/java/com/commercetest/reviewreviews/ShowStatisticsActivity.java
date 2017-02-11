@@ -8,6 +8,12 @@ import android.widget.TextView;
 
 import static com.commercetest.reviewreviews.ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW;
 
+/**
+ * Shows statistics to the user.
+ *
+ * Currently this is limited to what's in the local database, which is also limited to the count
+ * of reviews. Please add additional statistics here as we increase the functionality.
+ */
 public class ShowStatisticsActivity extends AppCompatActivity {
     SQLiteDatabase db;
     TextView total;

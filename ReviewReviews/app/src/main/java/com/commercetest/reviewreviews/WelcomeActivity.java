@@ -47,6 +47,15 @@ public class WelcomeActivity extends AppCompatActivity {
                     "", 0, "","");
         }
 
+        if (item.getItemId() == R.id.delete_all_reviews) {
+            Log.i("DeleteReviews", "Delete All Reviews selected");
+            // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
+            SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
+            // db.execSQL("DELETE FROM " + ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW);
+            int recordsDeleted = db.delete(ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW, "1", null);
+            Log.i(TAG, recordsDeleted + " records were deleted successfully.");
+        }
+
         if (item.getItemId() == R.id.load_reviews) {
             Log.i("LoadReviews", "Load Reviews requested");
             Intent intent = new Intent(this, LoadReviewsActivity.class);

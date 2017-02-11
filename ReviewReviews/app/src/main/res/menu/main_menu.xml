@@ -18,6 +18,11 @@
         app:showAsAction="ifRoom"
         />
     <item
+        android:id="@+id/delete_all_reviews"
+        android:title="Delete All Reviews"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/triage"
         android:title="@string/triage"
         app:showAsAction="ifRoom"
