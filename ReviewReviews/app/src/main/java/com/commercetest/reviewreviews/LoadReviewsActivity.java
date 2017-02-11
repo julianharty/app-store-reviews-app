@@ -54,7 +54,12 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 String message;
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    ReviewReader r = ReviewReader.fromStream(inputStream);
+                    byte[] buffer = new byte[3];
+                    inputStream.read(buffer,0,3);
+                    String encoding = GuessEncoding.guessFor(buffer);
+                    inputStream.close();
+                    inputStream = getContentResolver().openInputStream(uri);
+                    ReviewReader r = ReviewReader.fromStream(inputStream, encoding);
                     SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
                     Review review = null;
                     while ((review = r.next()) != null) {
@@ -65,6 +70,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
                             recordsRejected++;
                         }
                     }
+                    inputStream.close();
                     final String msg = "Import completed, added:" + recordsAdded + ", rejected: " + recordsRejected;
                     messageBox.setText(msg);
                     Log.i(TAG, msg);
