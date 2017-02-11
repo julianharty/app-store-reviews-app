@@ -8,6 +8,11 @@
         app:showAsAction="ifRoom"
         />
     <item
+        android:id="@+id/show_statistics"
+        android:title="@string/show_statistics"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/add_review"
         android:title="@string/add_review"
         app:showAsAction="ifRoom"

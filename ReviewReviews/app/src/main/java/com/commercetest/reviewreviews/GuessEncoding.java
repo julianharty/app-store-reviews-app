@@ -9,7 +9,7 @@ import java.io.IOException;
  *
  * It's pretty basic and could be fooled I expect. However it has enabled the app to process
  * files in ASCII, UTF8 (without the Byte Order Mark information), and UTF-16.
- * 
+ *
  * Created by julianharty_air on 11/02/2017.
  */
 

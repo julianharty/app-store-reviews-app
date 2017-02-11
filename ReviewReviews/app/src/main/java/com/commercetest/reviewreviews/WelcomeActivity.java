@@ -51,7 +51,12 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.i("LoadReviews", "Load Reviews requested");
             Intent intent = new Intent(this, LoadReviewsActivity.class);
             startActivity(intent);
-            // findReviewsToLoad();
+        }
+
+        if (item.getItemId() == R.id.show_statistics) {
+            Log.i("ShowStatistics", "Show Statistics requested");
+            Intent intent = new Intent(this, ShowStatisticsActivity.class);
+            startActivity(intent);
         }
 
         if (item.getItemId() == R.id.settings) {

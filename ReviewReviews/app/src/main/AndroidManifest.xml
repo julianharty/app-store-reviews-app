@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TriageActivity" />
-        <activity android:name=".LoadReviewsActivity"></activity>
+        <activity android:name=".LoadReviewsActivity" />
+        <activity android:name=".ShowStatisticsActivity"></activity>
     </application>
 
 </manifest>
