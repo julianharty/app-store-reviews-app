@@ -2,8 +2,10 @@ package com.commercetest.reviewreviews;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,13 +51,15 @@ public class LoadReviewsActivity extends AppCompatActivity {
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
+                dumpFileMetaData(uri);
                 int recordsAdded = 0;
                 int recordsRejected = 0;
                 String message;
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    byte[] buffer = new byte[3];
-                    inputStream.read(buffer,0,3);
+                    final int BYTES_TO_READ = 3;
+                    byte[] buffer = new byte[BYTES_TO_READ];
+                    inputStream.read(buffer,0,BYTES_TO_READ);
                     String encoding = GuessEncoding.guessFor(buffer);
                     inputStream.close();
                     inputStream = getContentResolver().openInputStream(uri);
@@ -93,4 +97,65 @@ public class LoadReviewsActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * dumpFileMetaData is based on an Android example
+     * https://developer.android.com/guide/topics/providers/document-provider.html
+     *
+     * Perhaps we could use it to provide data on a set of files e.g. CSV files in a folder to
+     * help the app and users pick only files with new and changed contents.
+     * @param uri
+     */
+    private void dumpFileMetaData(Uri uri) {
+
+        // The query, since it only applies to a single document, will only return
+        // one row. There's no need to filter, sort, or select fields, since we want
+        // all fields for one document.
+        Cursor cursor = getContentResolver()
+                .query(uri, null, null, null, null, null);
+
+        try {
+            // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
+            // "if there's anything to look at, look at it" conditionals.
+            if (cursor != null && cursor.moveToFirst()) {
+
+                // Note it's called "Display Name".  This is
+                // provider-specific, and might not necessarily be the file name.
+                String displayName = cursor.getString(
+                        cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                Log.i(TAG, "Display Name: " + displayName);
+
+                // Position 0 is the filename including some sort of location
+                // Position 1 is the mime-type
+                // Position 2 is the filename
+                // Position 3 is the timestamp of the file in mSecs
+                // See http://www.freeformatter.com/epoch-timestamp-to-date-converter.html to convert
+                // Position 4 seems to be set to "70"
+                // Position 5 is the length of the file
+                String fileTimestamp = cursor.getString(3);
+
+                int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                // If the size is unknown, the value stored is null.  But since an
+                // int can't be null in Java, the behavior is implementation-specific,
+                // which is just a fancy term for "unpredictable".  So as
+                // a rule, check if it's null before assigning to an int.  This will
+                // happen often:  The storage API allows for remote files, whose
+                // size might not be locally known.
+                String size = null;
+                long sz = -1;
+                if (!cursor.isNull(sizeIndex)) {
+                    // Technically the column stores an int, but cursor.getString()
+                    // will do the conversion automatically.
+                    size = cursor.getString(sizeIndex);
+                    sz = cursor.getLong(sizeIndex);
+                } else {
+                    size = "Unknown";
+                }
+                Log.i(TAG, "Size: " + size + ":" + sz);
+            }
+        } finally {
+            cursor.close();
+        }
+    }
+
 }
