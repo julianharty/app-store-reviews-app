@@ -3,7 +3,9 @@ package com.commercetest.reviewreviews;
 import org.junit.Test;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 
+import static com.commercetest.reviewreviews.CsvUtilities.countOccurrences;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -60,5 +62,45 @@ public class ReviewReaderUnitTest {
         reader = reader.index();
         Review review = reader.next();
 
+    }
+
+
+    @Test
+    public void correctly_split_csv_containing_commas_in_quotes() throws Exception {
+        final String CONTAINS_COMMAS = "\"Field One\",\"Field Two\",\"Red,Blue\"";
+        String[] values = splitCsvLine(CONTAINS_COMMAS);
+        assertEquals("Expected the string would be split correctly", 3, values.length);
+    }
+
+    private String[] splitCsvLine(String line) {
+        String[] initialTokens = line.split(",", -1);
+        ArrayList<String> revisedTokens = new ArrayList<String>();
+        boolean inQuotes = false;
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < initialTokens.length; i++) {
+            final String value = initialTokens[i];
+            int countOfDoubleQuotes = countOccurrences(value, '"');
+            // TODO: I don't yet account for double, contiguous quotes
+            boolean isOdd = (countOfDoubleQuotes % 2) == 1;
+            if (isOdd) {
+                inQuotes = true;
+                temp.append(initialTokens[i]);
+                int lookAheadLocation = i+1;
+                while ((lookAheadLocation < initialTokens.length) && inQuotes) {
+                    String nextValue = initialTokens[lookAheadLocation];
+                    if (nextValue.contains("\"")) {
+                        inQuotes = false;
+                    }
+                    temp.append(',');
+                    temp.append(nextValue);
+                    i++;
+                    lookAheadLocation++;
+                }
+                revisedTokens.add(temp.toString());
+            } else {
+                revisedTokens.add(value);
+            }
+        }
+        return revisedTokens.toArray(new String[0]);
     }
 }

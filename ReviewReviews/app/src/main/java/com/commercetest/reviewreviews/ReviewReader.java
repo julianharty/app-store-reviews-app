@@ -177,6 +177,6 @@ public class ReviewReader {
 
     String[] nextRow() throws IOException {
         String line = reader.readLine();
-        return null == line ? null : line.split(",");
+        return null == line ? null : line.split(",", -1);
     }
 }
