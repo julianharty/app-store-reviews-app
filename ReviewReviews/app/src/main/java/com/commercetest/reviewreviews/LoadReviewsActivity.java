@@ -17,6 +17,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/*
+Next steps for this class include:
+1) Removing hardcoded strings
+2) Creating a structure (an enum?) to collect the meta-data for the selected uri
+3) Present this information, formatted suitably, to users
+4) Record details of files selected, and the subset that were loaded, together with the results
+5) Incorporate mobile analytics into the class
+6) Refine the code based on code quality tools
+7) Check if the app has already loaded a file and inform the user so they can choose to reload it.
+8) Improve the GUI presented to the user, it's scruffy currently.
+ */
+
 public class LoadReviewsActivity extends AppCompatActivity {
     private static final String TAG = "LoadReviews";
     private static final int FIND_FILE_REQUEST_CODE = 8888;

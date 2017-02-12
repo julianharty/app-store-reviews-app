@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,15 +74,72 @@ public class ReviewReader {
                 row[fields.get(REVIEW_DATE_TIME)],
                 reviewMillis,
                 Integer.parseInt(row[fields.get(STAR_RATING)]));
+
+        // TODO 20170212 (jharty) This looks like an excellent place to try lambdas
+        String tmp = row[fields.get(APP_VERSION_CODE)];
+        if (tmp.length() > 0) { temp.appVersionCode(Integer.parseInt(tmp)); }
+
+        tmp = row[fields.get(APP_VERSION_NAME)];
+        if (tmp.length() > 0) { temp.appVersionName(tmp); }
+
+        tmp = row[fields.get(REVIEWER_LANGUAGE)];
+        if (tmp.length() > 0) { temp.reviewerLanguage(tmp); }
+
+        tmp = row[fields.get(DEVICE)];
+        if (tmp.length() > 0) { temp.device(tmp); }
+
+        tmp = row[fields.get(REVIEW_LAST_UPDATE_DATETIME)];
+        if (tmp.length() > 0) { temp.lastUpdated(tmp); }
+
+        tmp = row[fields.get(REVIEW_LAST_UPDATE_MILLIS)];
+        if (tmp.length() > 0) { temp.lastUpdatedMillis(Long.parseLong(tmp)); }
+
+        tmp = row[fields.get(REVIEW_TITLE)];
+        if (tmp.length() > 0) { temp.title(tmp); }
+
+        tmp = row[fields.get(REVIEW_TEXT)];
+        if (tmp.length() > 0) { temp.reviewText(tmp); }
+
+        tmp = row[fields.get(DEVELOPER_REPLY_DATETIME)];
+        if (tmp.length() > 0) { temp.developerReplied(tmp); }
+
+        tmp = row[fields.get(DEVELOPER_REPLY_MILLIS)];
+        if (tmp.length() > 0) { temp.developerRepliedMillis(Long.parseLong(tmp)); }
+
+        tmp = row[fields.get(DEVELOPER_REPLY)];
+        if (tmp.length() > 0) { temp.developerReplyText(tmp); }
+
+        tmp = row[fields.get(REVIEW_LINK)];
+        if (tmp.length() > 0) {
+            try {
+                URL url = new URL(tmp);
+                temp.reviewLink(url);
+            } catch (MalformedURLException e) {
+                Log.w("WONKY URL rejected", tmp, e);
+            }
+        }
+
         return temp.build();
     }
 
     ReviewReader index() throws IOException, UnexpectedFormatException {
         String[] items = nextRow();
         findOrDie(PACKAGE_NAME, items);
+        findOrDie(APP_VERSION_CODE, items);
+        findOrDie(APP_VERSION_NAME, items);
+        findOrDie(REVIEWER_LANGUAGE, items);
+        findOrDie(DEVICE, items);
         findOrDie(REVIEW_DATE_TIME, items);
         findOrDie(REVIEW_MILLIS, items);
+        findOrDie(REVIEW_LAST_UPDATE_DATETIME, items);
+        findOrDie(REVIEW_LAST_UPDATE_MILLIS, items);
         findOrDie(STAR_RATING, items);
+        findOrDie(REVIEW_TITLE, items);
+        findOrDie(REVIEW_TEXT, items);
+        findOrDie(DEVELOPER_REPLY_DATETIME, items);
+        findOrDie(DEVELOPER_REPLY_MILLIS, items);
+        findOrDie(DEVELOPER_REPLY, items);
+        findOrDie(REVIEW_LINK, items);
         return this;
     }
 

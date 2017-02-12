@@ -1,20 +1,19 @@
 package com.commercetest.reviewreviews;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
+/*
+Next steps for this class include:
+1) Move less frequent options e.g. for testing and administration off the main menu.
+2) Provide users greater control over deleting all data
+3) Revise the Welcome screen to be more welcoming :)
+ */
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = "WelcomeActivity";
@@ -51,7 +50,6 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.i("DeleteReviews", "Delete All Reviews selected");
             // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
-            // db.execSQL("DELETE FROM " + ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW);
             int recordsDeleted = db.delete(ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW, "1", null);
             Log.i(TAG, recordsDeleted + " records were deleted successfully.");
         }
