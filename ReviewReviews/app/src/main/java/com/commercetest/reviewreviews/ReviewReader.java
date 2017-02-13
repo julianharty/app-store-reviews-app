@@ -11,8 +11,11 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.commercetest.reviewreviews.CsvUtilities.countOccurrences;
 
 /**
  * Wrap up reading a csv file or stream.
@@ -118,7 +121,6 @@ public class ReviewReader {
                 Log.w("WONKY URL rejected", tmp, e);
             }
         }
-
         return temp.build();
     }
 
@@ -177,6 +179,46 @@ public class ReviewReader {
 
     String[] nextRow() throws IOException {
         String line = reader.readLine();
-        return null == line ? null : line.split(",", -1);
+        return null == line ? null : splitCsvLine(line);
+    }
+
+    /**
+     * Splits a CSV line, and accounts for commas in text values.
+     *
+     * Also copes with double-quotes in text values (but doesn't de-duplicate them yet).
+     * Package visible for ease of testing this method.
+     * @param line line of text to split
+     * @return set of values extracted from the line of text.
+     */
+    String[] splitCsvLine(String line) {
+        String[] initialTokens = line.split(",", -1);
+        ArrayList<String> revisedTokens = new ArrayList<String>();
+        boolean inQuotes = false;
+        StringBuilder temp = new StringBuilder();
+        for (int i = 0; i < initialTokens.length; i++) {
+            final String value = initialTokens[i];
+            int countOfDoubleQuotes = countOccurrences(value, '"');
+            boolean isOdd = (countOfDoubleQuotes % 2) == 1;
+            if (isOdd) {
+                inQuotes = true;
+                temp.append(initialTokens[i]);
+                int lookAheadLocation = i+1;
+                while ((lookAheadLocation < initialTokens.length) && inQuotes) {
+                    String nextValue = initialTokens[lookAheadLocation];
+                    if ((countOccurrences(nextValue, '"') %2) == 1) {
+                        inQuotes = false;
+                    }
+                    temp.append(',');
+                    temp.append(nextValue);
+                    i++;
+                    lookAheadLocation++;
+                }
+                // TODO 20170213 (jharty) Consider de-duplicating double-quotes here.
+                revisedTokens.add(temp.toString());
+            } else {
+                revisedTokens.add(value);
+            }
+        }
+        return revisedTokens.toArray(new String[0]);
     }
 }
