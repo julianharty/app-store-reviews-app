@@ -117,10 +117,23 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
     public static boolean insertGooglePlayReview(SQLiteDatabase db, Review review) {
         ContentValues reviewValues = new ContentValues();
         reviewValues.put("package", review.getPackageName());
+        reviewValues.put("app_version_code", review.getAppVersionCode());
+        reviewValues.put("app_version_name", review.getAppVersionName());
+        reviewValues.put("reviewer_language", review.getReviewerLanguage());
+        reviewValues.put("device", review.getDevice());
         reviewValues.put("review_submitted", review.getReviewSubmitted());
         reviewValues.put("review_submitted_millis", review.getReviewSubmittedMillis());
+        reviewValues.put("review_last_update", review.getLastUpdated());
+        reviewValues.put("review_last_update_millis", review.getLastUpdatedMillis());
         reviewValues.put("star_rating", review.getRating());
-        // TODO add the optional parameters.
+        reviewValues.put("review_title", review.getTitle());
+        reviewValues.put("review_text", review.getReviewText());
+        reviewValues.put("developer_reply", review.getDeveloperReplied());
+        reviewValues.put("developer_reply_millis", review.getDeveloperRepliedMillis());
+        reviewValues.put("developer_reply_text", review.getDeveloperReplyText());
+        if (review.getReviewLink() != null) {
+            reviewValues.put("review_link", review.getReviewLink().toString());
+        }
         final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
         Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
