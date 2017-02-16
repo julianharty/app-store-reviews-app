@@ -1,5 +1,6 @@
 #Android App to help review and mine reviews from the Google Play app store
 The project has several complementary aims. These include:
+
 1. An app that the development team can use to identify reviews they find valuable and enable them to process these reviews by categorising them and making notes.
 2. To help gather data for academic research purposes on the approach used, the validity of the app and its use of mobile analytics
 3. A learning experience
