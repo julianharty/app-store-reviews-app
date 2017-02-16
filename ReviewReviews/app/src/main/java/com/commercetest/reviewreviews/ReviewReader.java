@@ -89,7 +89,9 @@ public class ReviewReader {
         if (tmp.length() > 0) { temp.reviewerLanguage(tmp); }
 
         tmp = row[fields.get(DEVICE)];
-        if (tmp.length() > 0) { temp.device(tmp); }
+        if (tmp.length() > 0) {
+            temp.device(tmp);
+        }
 
         tmp = row[fields.get(REVIEW_LAST_UPDATE_DATETIME)];
         if (tmp.length() > 0) { temp.lastUpdated(tmp); }
@@ -98,10 +100,14 @@ public class ReviewReader {
         if (tmp.length() > 0) { temp.lastUpdatedMillis(Long.parseLong(tmp)); }
 
         tmp = row[fields.get(REVIEW_TITLE)];
-        if (tmp.length() > 0) { temp.title(tmp); }
+        if (tmp.length() > 0) {
+            temp.title(tmp);
+        }
 
         tmp = row[fields.get(REVIEW_TEXT)];
-        if (tmp.length() > 0) { temp.reviewText(tmp); }
+        if (tmp.length() > 0) {
+            temp.reviewText(tmp);
+        }
 
         tmp = row[fields.get(DEVELOPER_REPLY_DATETIME)];
         if (tmp.length() > 0) { temp.developerReplied(tmp); }
