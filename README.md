@@ -31,6 +31,7 @@ The app can also be built and deployed from the command-line using gradle e.g. `
 
 ##Design of the Android app
 The app will consist of several discrete layers:
+
 1. Data: reviews
 2. Application logic and navigation
 3. The GUI
