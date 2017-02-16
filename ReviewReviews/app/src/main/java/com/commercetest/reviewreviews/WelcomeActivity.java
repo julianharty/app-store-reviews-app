@@ -32,7 +32,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add_review) {
+        int selection = item.getItemId();
+        if (selection == R.id.add_review) {
             Log.i("AddReview", "AddReview requested");
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
             int now = (int) System.currentTimeMillis();
@@ -46,7 +47,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     "", 0, "","");
         }
 
-        if (item.getItemId() == R.id.delete_all_reviews) {
+        if (selection == R.id.delete_all_reviews) {
             Log.i("DeleteReviews", "Delete All Reviews selected");
             // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
@@ -54,19 +55,25 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.i(TAG, recordsDeleted + " records were deleted successfully.");
         }
 
-        if (item.getItemId() == R.id.load_reviews) {
+        if (selection == R.id.load_reviews) {
             Log.i("LoadReviews", "Load Reviews requested");
             Intent intent = new Intent(this, LoadReviewsActivity.class);
             startActivity(intent);
         }
 
-        if (item.getItemId() == R.id.show_statistics) {
+        if (selection == R.id.triage) {
+            Log.i("Triage", "I've been chosen! time to serve my masters");
+            Intent intent = new Intent(this, TriageActivity.class);
+            startActivity(intent);
+        }
+
+        if (selection == R.id.show_statistics) {
             Log.i("ShowStatistics", "Show Statistics requested");
             Intent intent = new Intent(this, ShowStatisticsActivity.class);
             startActivity(intent);
         }
 
-        if (item.getItemId() == R.id.settings) {
+        if (selection == R.id.settings) {
             Log.i("Settings", "Settings requested");
         }
         return super.onOptionsItemSelected(item);
