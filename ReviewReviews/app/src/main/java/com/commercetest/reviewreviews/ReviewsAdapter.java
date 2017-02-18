@@ -16,7 +16,8 @@ import android.support.v7.widget.RecyclerView;
  * Created by julianharty_air on 07/12/2016.
  */
 
-class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
+class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder>
+    implements View.OnClickListener {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView reviewTextView;
@@ -62,6 +63,11 @@ class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
         textView.setText(reviewTitle);
         Button button = holder.undoButton;
         button.setText("UnDo"); // Needs translating, etc.
+    }
+
+    @Override
+    public void onClick(View view) {
+        // Nothing to do here.
     }
 
     @Override
