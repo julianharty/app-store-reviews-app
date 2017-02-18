@@ -48,7 +48,8 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         sqlStatement.append("developer_reply TEXT, ");
         sqlStatement.append("developer_reply_millis INTEGER, ");
         sqlStatement.append("developer_reply_text TEXT, ");
-        sqlStatement.append("review_link TEXT");
+        sqlStatement.append("review_link TEXT, ");
+        sqlStatement.append("CONSTRAINT unique_review UNIQUE (package, review_submitted_millis)");
         sqlStatement.append(");");
         db.execSQL(sqlStatement.toString());
     }
