@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import static com.commercetest.reviewreviews.DatabaseConstants.FILE_IMPORT;
 import static com.commercetest.reviewreviews.DatabaseConstants.GOOGLE_PLAY_REVIEW;
 
 /**
@@ -16,7 +17,8 @@ import static com.commercetest.reviewreviews.DatabaseConstants.GOOGLE_PLAY_REVIE
  */
 public class ShowStatisticsActivity extends AppCompatActivity {
     SQLiteDatabase db;
-    TextView total;
+    TextView totalReviews;
+    TextView totalFilesImported;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +26,13 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_statistics);
 
         db = ReviewsDatabaseHelper.getDatabase(this);
-        total = (TextView) findViewById(R.id.total_reviews_in_db);
+        totalReviews = (TextView) findViewById(R.id.total_reviews_in_db);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        total.setText(String.format("%,d", count));
+        totalReviews.setText(String.format("%,d", count));
+
+        totalFilesImported = (TextView) findViewById(R.id.total_files_imported);
+        long imports = DatabaseUtils.queryNumEntries(db, FILE_IMPORT);
+        totalFilesImported.setText(String.format("%,d", imports));
     }
 
 
