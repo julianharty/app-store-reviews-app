@@ -2,21 +2,18 @@ package com.commercetest.reviewreviews;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import static com.commercetest.reviewreviews.DatabaseConstants.*;
 
 /**
  * Code to manage the creation, update and initial population of the database.
  */
 
 public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
-
-    public static final String DB_NAME = "reviews";
-    public static final String GOOGLE_PLAY_REVIEW = "GOOGLE_PLAY_REVIEW";
-    private static final int DB_VERSION = 1;
 
     ReviewsDatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -30,33 +27,19 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        StringBuilder sqlStatement = new StringBuilder();
-        sqlStatement.append("CREATE TABLE " + GOOGLE_PLAY_REVIEW + " (");
-        sqlStatement.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
-        sqlStatement.append("package TEXT NOT NULL, ");
-        sqlStatement.append("app_version_code INTEGER, ");
-        sqlStatement.append("app_version_name TEXT, ");
-        sqlStatement.append("reviewer_language TEXT, ");
-        sqlStatement.append("device TEXT, ");
-        sqlStatement.append("review_submitted TEXT NOT NULL, ");
-        sqlStatement.append("review_submitted_millis INTEGER, ");
-        sqlStatement.append("review_last_update TEXT, ");
-        sqlStatement.append("review_last_update_millis INTEGER, ");
-        sqlStatement.append("star_rating INTEGER NOT NULL, ");
-        sqlStatement.append("review_title TEXT, ");
-        sqlStatement.append("review_text TEXT, ");
-        sqlStatement.append("developer_reply TEXT, ");
-        sqlStatement.append("developer_reply_millis INTEGER, ");
-        sqlStatement.append("developer_reply_text TEXT, ");
-        sqlStatement.append("review_link TEXT, ");
-        sqlStatement.append("CONSTRAINT unique_review UNIQUE (package, review_submitted_millis)");
-        sqlStatement.append(");");
-        db.execSQL(sqlStatement.toString());
+        final String CREATE_REVIEWS_TABLE = CreateTableForAndroidReviews();
+        db.execSQL(CREATE_REVIEWS_TABLE);
+
+        final String CREATE_FILE_IMPORT_TABLE = CreateTableForFileImports();
+        db.execSQL(CREATE_FILE_IMPORT_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Nothing to do yet.
+        // Crude, but good enough while the app isn't launched.
+        final String DROP_TABLE = "DROP TABLE IF EXISTS " + GOOGLE_PLAY_REVIEW + ";";
+        db.execSQL(DROP_TABLE);
+        onCreate(db);
     }
 
     /**
@@ -88,22 +71,22 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
                                     String developerReply, int developerReplyTimeInMsecs,
                                     String developerReplyText, String reviewURL) {
         ContentValues reviewValues = new ContentValues();
-        reviewValues.put("package", javaPackageName);
-        reviewValues.put("app_version_code", appVersionCode);
-        reviewValues.put("app_version_name", appVersionName);
-        reviewValues.put("reviewer_language", reviewerLanguage);
-        reviewValues.put("device", device);
-        reviewValues.put("review_submitted", reviewSubmitted);
-        reviewValues.put("review_submitted_millis", reviewSubmittedTimeInMsecs);
-        reviewValues.put("review_last_update", reviewLastUpdated);
-        reviewValues.put("review_last_update_millis", reviewLastUpdatedInMsecs);
-        reviewValues.put("star_rating", starRating);
-        reviewValues.put("review_title", reviewTitle);
-        reviewValues.put("review_text", reviewText);
-        reviewValues.put("developer_reply", developerReply);
-        reviewValues.put("developer_reply_millis", developerReplyTimeInMsecs);
-        reviewValues.put("developer_reply_text", developerReplyText);
-        reviewValues.put("review_link", reviewURL);
+        reviewValues.put(PACKAGE, javaPackageName);
+        reviewValues.put(APP_VERSION_CODE, appVersionCode);
+        reviewValues.put(APP_VERSION_NAME, appVersionName);
+        reviewValues.put(REVIEWER_LANGUAGE, reviewerLanguage);
+        reviewValues.put(DEVICE, device);
+        reviewValues.put(REVIEW_SUBMITTED, reviewSubmitted);
+        reviewValues.put(REVIEW_SUBMITTED_MILLIS, reviewSubmittedTimeInMsecs);
+        reviewValues.put(REVIEW_LAST_UPDATED, reviewLastUpdated);
+        reviewValues.put(REVIEW_LAST_UPDATED_MILLIS, reviewLastUpdatedInMsecs);
+        reviewValues.put(STAR_RATING, starRating);
+        reviewValues.put(REVIEW_TITLE, reviewTitle);
+        reviewValues.put(REVIEW_TEXT, reviewText);
+        reviewValues.put(DEVELOPER_REPLY, developerReply);
+        reviewValues.put(DEVELOPER_REPLY_MILLIS, developerReplyTimeInMsecs);
+        reviewValues.put(DEVELOPER_REPLY_TEXT, developerReplyText);
+        reviewValues.put(REVIEW_LINK, reviewURL);
         db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
         Log.i("Review added", reviewTitle + ", count now: " + count);
@@ -117,27 +100,67 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
      */
     public static boolean insertGooglePlayReview(SQLiteDatabase db, Review review) {
         ContentValues reviewValues = new ContentValues();
-        reviewValues.put("package", review.getPackageName());
-        reviewValues.put("app_version_code", review.getAppVersionCode());
-        reviewValues.put("app_version_name", review.getAppVersionName());
-        reviewValues.put("reviewer_language", review.getReviewerLanguage());
-        reviewValues.put("device", review.getDevice());
-        reviewValues.put("review_submitted", review.getReviewSubmitted());
-        reviewValues.put("review_submitted_millis", review.getReviewSubmittedMillis());
-        reviewValues.put("review_last_update", review.getLastUpdated());
-        reviewValues.put("review_last_update_millis", review.getLastUpdatedMillis());
-        reviewValues.put("star_rating", review.getRating());
-        reviewValues.put("review_title", review.getTitle());
-        reviewValues.put("review_text", review.getReviewText());
-        reviewValues.put("developer_reply", review.getDeveloperReplied());
-        reviewValues.put("developer_reply_millis", review.getDeveloperRepliedMillis());
-        reviewValues.put("developer_reply_text", review.getDeveloperReplyText());
+        reviewValues.put(PACKAGE, review.getPackageName());
+        reviewValues.put(APP_VERSION_CODE, review.getAppVersionCode());
+        reviewValues.put(APP_VERSION_NAME, review.getAppVersionName());
+        reviewValues.put(REVIEWER_LANGUAGE, review.getReviewerLanguage());
+        reviewValues.put(DEVICE, review.getDevice());
+        reviewValues.put(REVIEW_SUBMITTED, review.getReviewSubmitted());
+        reviewValues.put(REVIEW_SUBMITTED_MILLIS, review.getReviewSubmittedMillis());
+        reviewValues.put(REVIEW_LAST_UPDATED, review.getLastUpdated());
+        reviewValues.put(REVIEW_LAST_UPDATED_MILLIS, review.getLastUpdatedMillis());
+        reviewValues.put(STAR_RATING, review.getRating());
+        reviewValues.put(REVIEW_TITLE, review.getTitle());
+        reviewValues.put(REVIEW_TEXT, review.getReviewText());
+        reviewValues.put(DEVELOPER_REPLY, review.getDeveloperReplied());
+        reviewValues.put(DEVELOPER_REPLY_MILLIS, review.getDeveloperRepliedMillis());
+        reviewValues.put(DEVELOPER_REPLY_TEXT, review.getDeveloperReplyText());
         if (review.getReviewLink() != null) {
-            reviewValues.put("review_link", review.getReviewLink().toString());
+            reviewValues.put(REVIEW_LINK, review.getReviewLink().toString());
         }
         final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
         Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
         return (rowId != -1);
+    }
+
+    private String CreateTableForAndroidReviews() {
+        StringBuilder sqlStatement = new StringBuilder();
+        sqlStatement.append("CREATE TABLE " + GOOGLE_PLAY_REVIEW + " (");
+        sqlStatement.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sqlStatement.append( PACKAGE + " TEXT NOT NULL, ");
+        sqlStatement.append(APP_VERSION_CODE + " INTEGER, ");
+        sqlStatement.append(APP_VERSION_NAME + " TEXT, ");
+        sqlStatement.append(REVIEWER_LANGUAGE + " TEXT, ");
+        sqlStatement.append(DEVICE + " TEXT, ");
+        sqlStatement.append(REVIEW_SUBMITTED + " TEXT NOT NULL, ");
+        sqlStatement.append(REVIEW_SUBMITTED_MILLIS + " INTEGER, ");
+        sqlStatement.append(REVIEW_LAST_UPDATED + " TEXT, ");
+        sqlStatement.append(REVIEW_LAST_UPDATED_MILLIS + " INTEGER, ");
+        sqlStatement.append(STAR_RATING + " INTEGER NOT NULL, ");
+        sqlStatement.append(REVIEW_TITLE + " TEXT, ");
+        sqlStatement.append(REVIEW_TEXT + " TEXT, ");
+        sqlStatement.append(DEVELOPER_REPLY + " TEXT, ");
+        sqlStatement.append(DEVELOPER_REPLY_MILLIS + " INTEGER, ");
+        sqlStatement.append(DEVELOPER_REPLY_TEXT + " TEXT, ");
+        sqlStatement.append(REVIEW_LINK + " TEXT, ");
+        sqlStatement.append("CONSTRAINT unique_review UNIQUE (" + PACKAGE + ", " +
+                REVIEW_LAST_UPDATED_MILLIS + ", " + STAR_RATING + ")");
+        sqlStatement.append(");");
+        return sqlStatement.toString();
+    }
+
+    private String CreateTableForFileImports() {
+        StringBuilder sqlStatement = new StringBuilder();
+        sqlStatement.append("CREATE TABLE " + FILE_IMPORT + " (");
+        sqlStatement.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sqlStatement.append(FILE_IDENTIFIER + " TEXT NOT NULL, ");
+        sqlStatement.append(FILE_SIZE + " INTEGER NOT NULL, ");
+        sqlStatement.append(FILE_TIMESTAMP_MILLIS + " INTEGER NOT NULL, ");
+        sqlStatement.append(NUM_ACCEPTED + " INTEGER NOT NULL DEFAULT -1, ");
+        sqlStatement.append(NUM_REJECTED + " INTEGER NOT NULL DEFAULT -1, ");
+        sqlStatement.append(LOADED_AT + " INTEGER(4) DEFAULT (CAST(strftime('%s','now') AS INT))");
+        sqlStatement.append(");");
+        return sqlStatement.toString();
     }
 }

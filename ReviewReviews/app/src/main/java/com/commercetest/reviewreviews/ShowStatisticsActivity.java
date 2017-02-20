@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import static com.commercetest.reviewreviews.ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW;
+import static com.commercetest.reviewreviews.DatabaseConstants.GOOGLE_PLAY_REVIEW;
 
 /**
  * Shows statistics to the user.
@@ -28,4 +28,6 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
         total.setText(String.format("%,d", count));
     }
+
+
 }

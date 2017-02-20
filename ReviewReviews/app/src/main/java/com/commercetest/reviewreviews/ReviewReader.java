@@ -70,7 +70,7 @@ public class ReviewReader {
         if (null == row) {
             return null;
         }
-        // TODO Map optional fields from the CSV header
+
         final long reviewMillis = Long.parseLong(row[fields.get(REVIEW_MILLIS)]);
         Review.Builder temp = new Review.Builder(
                 row[fields.get(PACKAGE_NAME)],
