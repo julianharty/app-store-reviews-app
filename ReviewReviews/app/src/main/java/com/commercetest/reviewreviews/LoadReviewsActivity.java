@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
     private static final String TAG = "LoadReviews";
     private static final int FIND_FILE_REQUEST_CODE = 8888;
     private Button findFileToLoadButton;
+    private Button launchWebBrowser;
     TextView messageBox;
 
     @Override
@@ -51,6 +53,16 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 findReviewsToLoad();
             }
         });
+        launchWebBrowser = (Button) findViewById(R.id.launchBrowserToDownloadReviews);
+        launchWebBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.download_reviews_url)));
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void findReviewsToLoad() {

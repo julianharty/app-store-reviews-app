@@ -12,33 +12,41 @@
         tools:context="com.commercetest.reviewreviews.WelcomeActivity">
 
     <TextView
-            android:id="@+id/welcome_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome"/>
-    <View
-            android:id="@+id/dividing_line_on_welcome_screen"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/welcome_text"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@android:color/darker_gray"
-            android:layout_gravity="bottom" />
+        android:id="@+id/no_reviews_yet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_reviews_yet_message"/>
 
     <TextView
-            android:id="@+id/contact_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/dividing_line_on_welcome_screen"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/contact"
-            android:autoLink="email" />
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/no_reviews_yet"
+        android:text="@string/welcome"/>
+    <View
+        android:id="@+id/dividing_line_on_welcome_screen"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/welcome_text"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:color/darker_gray"
+        android:layout_gravity="bottom" />
+
     <TextView
-            android:id="@+id/project_home_url"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/contact_email"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/project_home"
-            android:autoLink="web" />
+        android:id="@+id/contact_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dividing_line_on_welcome_screen"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/contact"
+        android:autoLink="email" />
+    <TextView
+        android:id="@+id/project_home_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_email"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/project_home"
+        android:autoLink="web" />
 </RelativeLayout>

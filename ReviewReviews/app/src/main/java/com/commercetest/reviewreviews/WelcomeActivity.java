@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 /*
 Next steps for this class include:
@@ -22,6 +24,13 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        long numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+        TextView noReviewsMessage = (TextView) findViewById(R.id.no_reviews_yet);
+        if (numberOfReviews == 0) {
+            noReviewsMessage.setVisibility(View.VISIBLE);
+        } else {
+            noReviewsMessage.setVisibility(View.GONE);
+        }
     }
 
     @Override

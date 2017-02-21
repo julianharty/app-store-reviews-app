@@ -28,18 +28,18 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_statistics);
 
-        db = ReviewsDatabaseHelper.getDatabase(this);
         totalReviews = (TextView) findViewById(R.id.total_reviews_in_db);
-        long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        totalReviews.setText(String.format("%,d", count));
+        long countOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+        totalReviews.setText(String.format("%,d", countOfReviews));
 
         totalFilesImported = (TextView) findViewById(R.id.total_files_imported);
-        long imports = DatabaseUtils.queryNumEntries(db, FILE_IMPORT);
+        long imports = ReviewsDatabaseHelper.fileImportCount(this);
 
         String[] projection = {
                 "SUM(" + NUM_ACCEPTED + ") AS ACCEPTED_COUNT",
                 "SUM(" + NUM_REJECTED + ") AS REJECTED_COUNT"
         };
+        db = ReviewsDatabaseHelper.getDatabase(this);
         Cursor statistics = db.query(DatabaseConstants.FILE_IMPORT,
                 projection,
                 null,
