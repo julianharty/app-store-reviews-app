@@ -2,19 +2,30 @@
     <string name="add_review">Add Review</string>
     <string name="app_name">Review Reviews</string>
     <string name="contact">julianharty@gmail.com</string>
-    <string name="welcome">Welcome to this app.
-        It is part of my Ph.D Research meanwhile it might help me and others
-        improve the testing of Android apps using reviews on Google Play.\n
+    <string name="welcome">Welcome to this app, it is part of my Ph.D Research.
+        Meanwhile it might help me and others improve the
+        testing of Android apps using reviews on Google Play.\n\n
 
-        It includes a set of reviews for Kiwix apps so you can practice ways
-        to apply concepts and skills. Future editions of the app may have
-        facilities to import additional reviews.\n
+        I have provided sets of reviews for Kiwix apps so you can practice ways
+        to apply concepts and skills. You can import these, and additional, reviews.\n\n
 
         The app incorporates analytics on how it is being used. These are an
         integral part of the learning and research aspects of this project.
     </string>
-    <string name="loadButtonText">Find file to load</string>
-    <string name="loadAnotherFileText">Find another file to load</string>
+    <string name="load_reviews_msg">
+        Google allows authorised users to download reviews from the Google Play Developer Console.
+        We also have sets of reviews available to download from a shared folder in Google Drive
+        so you can experiment with these. The files containing reviews are in CSV format.\n\n
+
+        You can try downloading reviews from the Google Drive folder, using the button below.
+        <b>For now, please use a web browser, not the Google Drive app to download the files</b>
+        , otherwise you may end up mired in complexity.
+    </string>
+    <string name="download_reviews">Download Reviews</string>
+    <string name="download_reviews_url">https://drive.google.com/open?id=0BzdiJKOOxhNlTjdpNGdSQnZoQmc</string>
+    <string name="loadButtonText">Find local file to import</string>
+    <string name="loadAnotherFileText">Find another local file to import</string>
+    <string name="no_reviews_yet_message">There are no reviews loaded. Please load some to get started.</string>
     <string name="project_home">https://github.com/julianharty/app-store-reviews-app</string>
     <string name="result_heading">Result</string>
     <string name="settings">Settings</string>

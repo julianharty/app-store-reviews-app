@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 /*
 Next steps for this class include:
@@ -17,17 +19,44 @@ Next steps for this class include:
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = "WelcomeActivity";
+    private long numberOfReviews;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+        TextView noReviewsMessage = (TextView) findViewById(R.id.no_reviews_yet);
+        if (numberOfReviews == 0) {
+            noReviewsMessage.setVisibility(View.VISIBLE);
+        } else {
+            noReviewsMessage.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        updateMenuOptions();
         return true;
+    }
+
+    private void updateMenuOptions() {
+        // Precautionary call, perhaps could be optimised away - TBD.
+        numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+
+        MenuItem triageMenu = menu.findItem(R.id.triage);
+        MenuItem deleteMenu = menu.findItem(R.id.delete_all_reviews);
+        if (numberOfReviews == 0) {
+            triageMenu.setEnabled(false);
+            deleteMenu.setEnabled(false);
+        } else {
+            triageMenu.setEnabled(true);
+            deleteMenu.setEnabled(true);
+        }
     }
 
     @Override
@@ -52,9 +81,13 @@ public class WelcomeActivity extends AppCompatActivity {
             // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
             int reviewsDeleted = db.delete(DatabaseConstants.GOOGLE_PLAY_REVIEW, "1", null);
-            Log.i(TAG, reviewsDeleted + " records were deleted successfully.");
+            Log.i(TAG, reviewsDeleted + " records were deleted OK.");
             int importsDeleted = db.delete(DatabaseConstants.FILE_IMPORT, "1", null);
-            Log.i(TAG, importsDeleted + " details of file imports were deleted successfully.");
+            Log.i(TAG, importsDeleted + " details of file imports were deleted OK.");
+            int statusRecordsDeleted = db.delete(DatabaseConstants.REVIEW_STATUS, "1", null);
+            Log.i(TAG, statusRecordsDeleted + " status records deleted OK.");
+            int statusHistoryRecordsDeleted = db.delete(DatabaseConstants.REVIEW_HISTORY, "1", null);
+            Log.i(TAG, statusHistoryRecordsDeleted + " status history records were deleted OK");
         }
 
         if (selection == R.id.load_reviews) {
@@ -78,6 +111,8 @@ public class WelcomeActivity extends AppCompatActivity {
         if (selection == R.id.settings) {
             Log.i("Settings", "Settings requested");
         }
+        // Update the menu as necessary.
+        updateMenuOptions();
         return super.onOptionsItemSelected(item);
     }
 

@@ -11,6 +11,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.commercetest.reviewreviews.LoadReviewsActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/load_reviews_msg"/>
+
+    <Button
+        android:id="@+id/launchBrowserToDownloadReviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/download_reviews"/>
+
     <Button
         android:id="@+id/findFileToLoad"
         android:layout_width="wrap_content"
@@ -21,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/result_heading"
+        android:visibility="invisible"
         android:gravity="center_horizontal"
         />
     <TextView

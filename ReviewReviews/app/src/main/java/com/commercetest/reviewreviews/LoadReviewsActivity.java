@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -24,9 +23,9 @@ import static com.commercetest.reviewreviews.DatabaseConstants.*;
 /*
 Next steps for this class include:
 1) Removing hardcoded strings
-2) Creating a structure (an enum?) to collect the meta-data for the selected uri
+2) Creating a structure (an enum?) to collect the meta-data for the selected uri - Done
 3) Present this information, formatted suitably, to users
-4) Record details of files selected, and the subset that were loaded, together with the results
+4) Record details of files selected, and the subset that were loaded, together with the results - Done
 5) Incorporate mobile analytics into the class
 6) Refine the code based on code quality tools
 7) Check if the app has already loaded a file and inform the user so they can choose to reload it.
@@ -37,6 +36,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
     private static final String TAG = "LoadReviews";
     private static final int FIND_FILE_REQUEST_CODE = 8888;
     private Button findFileToLoadButton;
+    private Button launchWebBrowser;
     TextView messageBox;
 
     @Override
@@ -51,6 +51,16 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 findReviewsToLoad();
             }
         });
+        launchWebBrowser = (Button) findViewById(R.id.launchBrowserToDownloadReviews);
+        launchWebBrowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.download_reviews_url)));
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void findReviewsToLoad() {
@@ -63,7 +73,11 @@ public class LoadReviewsActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
 
-        if (requestCode == FIND_FILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode != FIND_FILE_REQUEST_CODE) return;
+
+        if (resultCode != Activity.RESULT_OK) {
+            Log.i(TAG, "User did not select a file. Possible usability problem?");
+        } else {
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
@@ -91,18 +105,13 @@ public class LoadReviewsActivity extends AppCompatActivity {
                         }
                     }
                     inputStream.close();
-                    final String msg = "Import completed, added:" + recordsAdded + ", rejected: " + recordsRejected;
+                    final String msg = "Import completed,\nadded:" + recordsAdded + ", rejected: " + recordsRejected;
                     fileInformation.put(NUM_ACCEPTED, recordsAdded);
                     fileInformation.put(NUM_REJECTED, recordsRejected);
                     recordFileImport(db, fileInformation);
                     messageBox.setText(msg);
                     Log.i(TAG, msg);
                     findFileToLoadButton.setText(R.string.loadAnotherFileText);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "Problem accessing file of reviews", e);
-                    e.printStackTrace();
-                    message = e.getLocalizedMessage();
-                    messageBox.setText(message);
                 } catch (IOException e) {
                     Log.e(TAG, "Problem accessing file of reviews", e);
                     e.printStackTrace();
@@ -128,19 +137,19 @@ public class LoadReviewsActivity extends AppCompatActivity {
      *
      * Perhaps we could use it to provide data on a set of files e.g. CSV files in a folder to
      * help the app and users pick only files with new and changed contents.
-     * @param uri
+     * @param uri of the file selected.
      */
     private ContentValues obtainFileMetaData(Uri uri) {
 
         // The query, since it only applies to a single document, will only return
         // one row. There's no need to filter, sort, or select fields, since we want
         // all fields for one document.
-        Cursor cursor = getContentResolver()
-                .query(uri, null, null, null, null, null);
+
 
         ContentValues fileInformation = new ContentValues();
 
-        try {
+        try (Cursor cursor = getContentResolver()
+                .query(uri, null, null, null, null, null)) {
             // moveToFirst() returns false if the cursor has 0 rows.  Very handy for
             // "if there's anything to look at, look at it" conditionals.
             if (cursor != null && cursor.moveToFirst()) {
@@ -171,24 +180,15 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 // a rule, check if it's null before assigning to an int.  This will
                 // happen often:  The storage API allows for remote files, whose
                 // size might not be locally known.
-                String size = null;
-                long sz = -1;
+                long size;
                 if (!cursor.isNull(sizeIndex)) {
-                    // Technically the column stores an int, but cursor.getString()
-                    // will do the conversion automatically.
-                    size = cursor.getString(sizeIndex);
-                    sz = cursor.getLong(sizeIndex);
+                    size = cursor.getLong(sizeIndex);
                 } else {
-                    size = "Unknown";
-                    sz = -1;
+                    size = -1;
                 }
-                fileInformation.put(FILE_SIZE, sz);
-                Log.i(TAG, "Size: " + size + ":" + sz);
+                fileInformation.put(FILE_SIZE, size);
             }
-        } finally {
-            cursor.close();
         }
         return fileInformation;
     }
-
 }

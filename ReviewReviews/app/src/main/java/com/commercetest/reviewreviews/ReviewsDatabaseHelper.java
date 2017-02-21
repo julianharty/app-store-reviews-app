@@ -32,16 +32,46 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
 
         final String CREATE_FILE_IMPORT_TABLE = CreateTableForFileImports();
         db.execSQL(CREATE_FILE_IMPORT_TABLE);
+
+        final String CREATE_REVIEW_STATUS_TABLE = CreateTableForReviewStatus();
+        db.execSQL(CREATE_REVIEW_STATUS_TABLE);
+
+        final String CREATE_REVIEW_HISTORY_TABLE = CreateTableForReviewHistory();
+        db.execSQL(CREATE_REVIEW_HISTORY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Crude, but good enough while the app isn't launched.
-        final String DROP_TABLE = "DROP TABLE IF EXISTS " + GOOGLE_PLAY_REVIEW + ";";
-        db.execSQL(DROP_TABLE);
+        final String DROP_REVIEW_TABLE = "DROP TABLE IF EXISTS " + GOOGLE_PLAY_REVIEW + ";";
+        db.execSQL(DROP_REVIEW_TABLE);
+
+        final String DROP_FILE_HISTORY_TABLE = "DROP TABLE IF EXISTS " + FILE_IMPORT + ";";
+        db.execSQL(DROP_FILE_HISTORY_TABLE);
+
+        final String DROP_REVIEW_STATUS_TABLE = "DROP TABLE IF EXISTS " + REVIEW_STATUS + ";";
+        db.execSQL(DROP_REVIEW_STATUS_TABLE);
+
+        final String DROP_REVIEW_HISTORY_TABLE = "DROP TABLE IF EXISTS " + REVIEW_HISTORY + ";";
+        db.execSQL(DROP_REVIEW_HISTORY_TABLE);
+
         onCreate(db);
     }
 
+    /**
+     * Queries the database to count the reviews.
+     * @param context
+     * @return the count of reviews.
+     */
+    static long reviewCount(Context context) {
+        SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(context);
+        return DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
+    }
+
+    static long fileImportCount(Context context) {
+        SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(context);
+        return DatabaseUtils.queryNumEntries(db, FILE_IMPORT);
+    }
     /**
      * Add a review from Google Play App Store to the database
      * @param db open database connection
@@ -87,9 +117,9 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         reviewValues.put(DEVELOPER_REPLY_MILLIS, developerReplyTimeInMsecs);
         reviewValues.put(DEVELOPER_REPLY_TEXT, developerReplyText);
         reviewValues.put(REVIEW_LINK, reviewURL);
-        db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
+        final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
         long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        Log.i("Review added", reviewTitle + ", count now: " + count);
+        Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
     }
 
     /**
@@ -118,9 +148,24 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         if (review.getReviewLink() != null) {
             reviewValues.put(REVIEW_LINK, review.getReviewLink().toString());
         }
-        final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
-        long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
+
+        final long rowId;
+        // Wrapped both inserts as a SQL transaction as a precaution.
+        db.beginTransaction();
+        try {
+            rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
+            long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
+            Log.i("Review added", "Row ID: [" + rowId + "] Count now: " + count);
+            if (rowId != -1) {
+                ContentValues statusValues = new ContentValues();
+                statusValues.put(REVIEW_ID, rowId);
+                statusValues.put(STATUS, ReviewStatus.INITIAL.toString());
+                final long rowIdForStatus = db.insert(REVIEW_STATUS, null, statusValues);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
         return (rowId != -1);
     }
 
@@ -160,6 +205,30 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         sqlStatement.append(NUM_ACCEPTED + " INTEGER NOT NULL DEFAULT -1, ");
         sqlStatement.append(NUM_REJECTED + " INTEGER NOT NULL DEFAULT -1, ");
         sqlStatement.append(LOADED_AT + " INTEGER(4) DEFAULT (CAST(strftime('%s','now') AS INT))");
+        sqlStatement.append(");");
+        return sqlStatement.toString();
+    }
+
+    private String CreateTableForReviewStatus() {
+        StringBuilder sqlStatement = new StringBuilder();
+        sqlStatement.append("CREATE TABLE " + REVIEW_STATUS + " (");
+        sqlStatement.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sqlStatement.append(REVIEW_ID + " INTEGER NOT NULL, ");
+        sqlStatement.append(STATUS + " TEXT NOT NULL, ");
+        sqlStatement.append(STATUS_TIMESTAMP + " INTEGER(4) DEFAULT (CAST(strftime('%s','now') AS INT)), ");
+        sqlStatement.append("FOREIGN KEY (" + REVIEW_ID + ") REFERENCES " + GOOGLE_PLAY_REVIEW + "(_id)");
+        sqlStatement.append(");");
+        return sqlStatement.toString();
+    }
+
+    private String CreateTableForReviewHistory() {
+        StringBuilder sqlStatement = new StringBuilder();
+        sqlStatement.append("CREATE TABLE " + REVIEW_HISTORY + " (");
+        sqlStatement.append("_id INTEGER PRIMARY KEY AUTOINCREMENT, ");
+        sqlStatement.append(REVIEW_ID + " INTEGER NOT NULL, ");
+        sqlStatement.append(STATUS + " TEXT NOT NULL, ");
+        sqlStatement.append(HISTORY_TIMESTAMP + " INTEGER(4) DEFAULT (CAST(strftime('%s','now') AS INT)), ");
+        sqlStatement.append("FOREIGN KEY (" + REVIEW_ID + ") REFERENCES " + GOOGLE_PLAY_REVIEW + "(_id)");
         sqlStatement.append(");");
         return sqlStatement.toString();
     }

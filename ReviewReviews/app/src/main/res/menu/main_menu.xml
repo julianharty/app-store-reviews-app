@@ -31,5 +31,6 @@
         android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="never"
+        android:enabled="false"
         />
 </menu>
