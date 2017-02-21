@@ -1,10 +1,7 @@
-from __future__ import print_function
 import sys
 import os
 import csv
-import lmdb
 import review_pb2 as review
-import json
 from google.protobuf.internal import encoder
 
 def csv2pb(input, output):
