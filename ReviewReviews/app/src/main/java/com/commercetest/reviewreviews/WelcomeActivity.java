@@ -61,9 +61,13 @@ public class WelcomeActivity extends AppCompatActivity {
             // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
             int reviewsDeleted = db.delete(DatabaseConstants.GOOGLE_PLAY_REVIEW, "1", null);
-            Log.i(TAG, reviewsDeleted + " records were deleted successfully.");
+            Log.i(TAG, reviewsDeleted + " records were deleted OK.");
             int importsDeleted = db.delete(DatabaseConstants.FILE_IMPORT, "1", null);
-            Log.i(TAG, importsDeleted + " details of file imports were deleted successfully.");
+            Log.i(TAG, importsDeleted + " details of file imports were deleted OK.");
+            int statusRecordsDeleted = db.delete(DatabaseConstants.REVIEW_STATUS, "1", null);
+            Log.i(TAG, statusRecordsDeleted + " status records deleted OK.");
+            int statusHistoryRecordsDeleted = db.delete(DatabaseConstants.REVIEW_HISTORY, "1", null);
+            Log.i(TAG, statusHistoryRecordsDeleted + " status history records were deleted OK");
         }
 
         if (selection == R.id.load_reviews) {

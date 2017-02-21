@@ -36,12 +36,13 @@ final class DatabaseConstants {
     static final String LOADED_AT = "loaded_at";
 
     static final String REVIEW_STATUS = "REVIEW_STATUS";
-    static final String STATUS = "status";      // Also used in REVIEW_HISTORY
+    static final String REVIEW_ID = "review_id";    // Also used in REVIEW_HISTORY
+    static final String STATUS = "status";          // Also used in REVIEW_HISTORY
     static final String STATUS_TIMESTAMP = "status_timestamp";
 
     static final String REVIEW_HISTORY = "REVIEW_HISTORY";
     static final String HISTORY_TIMESTAMP = "history_timestamp";
 
     //I've placed DB_VERSION here so I can report the value easily in the app
-    static final int DB_VERSION = 3;
+    static final int DB_VERSION = 4;
 }

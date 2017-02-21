@@ -105,7 +105,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
                         }
                     }
                     inputStream.close();
-                    final String msg = "Import completed, added:" + recordsAdded + ", rejected: " + recordsRejected;
+                    final String msg = "Import completed,\nadded:" + recordsAdded + ", rejected: " + recordsRejected;
                     fileInformation.put(NUM_ACCEPTED, recordsAdded);
                     fileInformation.put(NUM_REJECTED, recordsRejected);
                     recordFileImport(db, fileInformation);
