@@ -51,8 +51,10 @@ public class WelcomeActivity extends AppCompatActivity {
             Log.i("DeleteReviews", "Delete All Reviews selected");
             // For now I'll simply delete them. in future we'll ask the user to confirm, etc.
             SQLiteDatabase db = ReviewsDatabaseHelper.getDatabase(this);
-            int recordsDeleted = db.delete(ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW, "1", null);
-            Log.i(TAG, recordsDeleted + " records were deleted successfully.");
+            int reviewsDeleted = db.delete(DatabaseConstants.GOOGLE_PLAY_REVIEW, "1", null);
+            Log.i(TAG, reviewsDeleted + " records were deleted successfully.");
+            int importsDeleted = db.delete(DatabaseConstants.FILE_IMPORT, "1", null);
+            Log.i(TAG, importsDeleted + " details of file imports were deleted successfully.");
         }
 
         if (selection == R.id.load_reviews) {

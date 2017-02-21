@@ -61,7 +61,7 @@ public class TriageActivity extends AppCompatActivity {
                 "review_text"
         };
 
-        Cursor cursor = db.query(ReviewsDatabaseHelper.GOOGLE_PLAY_REVIEW,
+        Cursor cursor = db.query(DatabaseConstants.GOOGLE_PLAY_REVIEW,
                 projection,
                 null,
                 null,

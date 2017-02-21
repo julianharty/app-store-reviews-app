@@ -23,4 +23,17 @@
         android:layout_height="wrap_content"
         android:hint="0"/>
 
+    <TextView
+        android:id="@+id/total_files_imported_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_reviews_in_db"
+        android:text="Files imported"/>
+
+    <TextView
+        android:id="@+id/total_files_imported"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_files_imported_label"/>
+
 </RelativeLayout>
