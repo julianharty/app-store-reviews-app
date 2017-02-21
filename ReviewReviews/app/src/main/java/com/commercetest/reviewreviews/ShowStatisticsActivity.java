@@ -13,10 +13,9 @@ import static com.commercetest.reviewreviews.DatabaseConstants.NUM_ACCEPTED;
 import static com.commercetest.reviewreviews.DatabaseConstants.NUM_REJECTED;
 
 /**
- * Shows statistics to the user.
+ * Shows statistics to the user based on what's recorded in the local database.
  *
- * Currently this is limited to what's in the local database, which is also limited to the count
- * of reviews. Please add additional statistics here as we increase the functionality.
+ * Please add additional statistics here as we increase the functionality.
  */
 public class ShowStatisticsActivity extends AppCompatActivity {
     SQLiteDatabase db;
@@ -35,6 +34,7 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         totalFilesImported = (TextView) findViewById(R.id.total_files_imported);
         long imports = ReviewsDatabaseHelper.fileImportCount(this);
 
+        // TODO 20170221 (jharty) consider moving this perhaps misplaced code.
         String[] projection = {
                 "SUM(" + NUM_ACCEPTED + ") AS ACCEPTED_COUNT",
                 "SUM(" + NUM_REJECTED + ") AS REJECTED_COUNT"
@@ -54,8 +54,5 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         totalFilesImported.setText(
                 String.format("files %,d, accepted %,d, rejected %,d",
                     imports, accepted, rejected));
-
     }
-
-
 }
