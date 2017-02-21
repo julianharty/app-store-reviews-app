@@ -19,12 +19,15 @@ Next steps for this class include:
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = "WelcomeActivity";
+    private long numberOfReviews;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        long numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+
+        numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
         TextView noReviewsMessage = (TextView) findViewById(R.id.no_reviews_yet);
         if (numberOfReviews == 0) {
             noReviewsMessage.setVisibility(View.VISIBLE);
@@ -35,8 +38,25 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        updateMenuOptions();
         return true;
+    }
+
+    private void updateMenuOptions() {
+        // Precautionary call, perhaps could be optimised away - TBD.
+        numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
+
+        MenuItem triageMenu = menu.findItem(R.id.triage);
+        MenuItem deleteMenu = menu.findItem(R.id.delete_all_reviews);
+        if (numberOfReviews == 0) {
+            triageMenu.setEnabled(false);
+            deleteMenu.setEnabled(false);
+        } else {
+            triageMenu.setEnabled(true);
+            deleteMenu.setEnabled(true);
+        }
     }
 
     @Override
@@ -91,6 +111,8 @@ public class WelcomeActivity extends AppCompatActivity {
         if (selection == R.id.settings) {
             Log.i("Settings", "Settings requested");
         }
+        // Update the menu as necessary.
+        updateMenuOptions();
         return super.onOptionsItemSelected(item);
     }
 
