@@ -10,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 
 /*
 Next steps for this class include:
@@ -20,10 +22,15 @@ Next steps for this class include:
  */
 
 public class WelcomeActivity extends AppCompatActivity {
-    private FirebaseAnalytics mFirebaseAnalytics;
+
     private static final String TAG = "WelcomeActivity";
     private long numberOfReviews;
     private Menu menu;
+
+    /**
+     * The {@link Tracker} used to record screen views.
+     */
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +38,15 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        // [START screen_view_hit]
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName(TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
 
         numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
         TextView noReviewsMessage = (TextView) findViewById(R.id.no_reviews_yet);

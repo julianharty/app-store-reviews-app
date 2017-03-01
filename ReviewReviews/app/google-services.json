@@ -1,52 +1,35 @@
 {
   "project_info": {
-    "project_number": "688480019204",
-    "firebase_url": "https://reviewreviews-e763f.firebaseio.com",
-    "project_id": "reviewreviews-e763f",
-    "storage_bucket": "reviewreviews-e763f.appspot.com"
+    "project_number": "799686413608",
+    "project_id": "reviewreviewsga"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:688480019204:android:c0de4b165efb9947",
+        "mobilesdk_app_id": "1:799686413608:android:c0de4b165efb9947",
         "android_client_info": {
           "package_name": "com.commercetest.reviewreviews"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "688480019204-us1galtgu8ph7k4ql5gceb66cmva58i3.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.commercetest.reviewreviews",
-            "certificate_hash": "01bd5b9dda3fd1321ee1ea3d4e6ab98d3f05ea04"
-          }
-        },
-        {
-          "client_id": "688480019204-jtgotljuehg8mddlhsju3d989i41tmbq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCuhrXb1I7hOpDf9C4odpRf3wzB6Sr_DLk"
+          "current_key": "AIzaSyBnwvIuoY9gUbdTdR0fPpmlvoIgRnwWcCs"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-85370017-1"
+          }
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "688480019204-jtgotljuehg8mddlhsju3d989i41tmbq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 2
+          "status": 1
         }
       }
     }
