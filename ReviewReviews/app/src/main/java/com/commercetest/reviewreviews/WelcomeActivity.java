@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 /*
 Next steps for this class include:
 1) Move less frequent options e.g. for testing and administration off the main menu.
@@ -18,14 +20,19 @@ Next steps for this class include:
  */
 
 public class WelcomeActivity extends AppCompatActivity {
+    private FirebaseAnalytics mFirebaseAnalytics;
     private static final String TAG = "WelcomeActivity";
     private long numberOfReviews;
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         numberOfReviews = ReviewsDatabaseHelper.reviewCount(this);
         TextView noReviewsMessage = (TextView) findViewById(R.id.no_reviews_yet);
@@ -40,6 +47,12 @@ public class WelcomeActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        updateMenuOptions();
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         updateMenuOptions();
         return true;
     }
@@ -115,5 +128,4 @@ public class WelcomeActivity extends AppCompatActivity {
         updateMenuOptions();
         return super.onOptionsItemSelected(item);
     }
-
 }

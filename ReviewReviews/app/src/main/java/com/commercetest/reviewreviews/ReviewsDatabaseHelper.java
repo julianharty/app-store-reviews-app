@@ -92,7 +92,7 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
      * @param developerReplyText what the developer wrote
      * @param reviewURL link to the review online
      */
-    public static void insertGooglePlayReview(SQLiteDatabase db, String javaPackageName,
+    public static boolean insertGooglePlayReview(SQLiteDatabase db, String javaPackageName,
                                     String appVersionCode, int appVersionName,
                                     String reviewerLanguage, String device,
                                     String reviewSubmitted, int reviewSubmittedTimeInMsecs,
@@ -117,9 +117,8 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
         reviewValues.put(DEVELOPER_REPLY_MILLIS, developerReplyTimeInMsecs);
         reviewValues.put(DEVELOPER_REPLY_TEXT, developerReplyText);
         reviewValues.put(REVIEW_LINK, reviewURL);
-        final long rowId = db.insert(GOOGLE_PLAY_REVIEW, null, reviewValues);
-        long count = DatabaseUtils.queryNumEntries(db, GOOGLE_PLAY_REVIEW);
-        Log.i("Review added",  "Row ID: [" + rowId + "] Count now: " + count);
+
+        return insertReview(db, reviewValues);
     }
 
     /**
@@ -149,6 +148,10 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
             reviewValues.put(REVIEW_LINK, review.getReviewLink().toString());
         }
 
+        return insertReview(db, reviewValues);
+    }
+
+    private static boolean insertReview(SQLiteDatabase db, ContentValues reviewValues) {
         final long rowId;
         // Wrapped both inserts as a SQL transaction as a precaution.
         db.beginTransaction();

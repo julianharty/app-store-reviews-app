@@ -52,7 +52,7 @@ public class ShowStatisticsActivity extends AppCompatActivity {
         long accepted = statistics.getInt(statistics.getColumnIndexOrThrow("ACCEPTED_COUNT"));
         long rejected = statistics.getInt(statistics.getColumnIndexOrThrow("REJECTED_COUNT"));
         totalFilesImported.setText(
-                String.format("files %,d, accepted %,d, rejected %,d",
+                String.format("files %,d. Records accepted %,d, rejected %,d",
                     imports, accepted, rejected));
     }
 }
