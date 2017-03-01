@@ -9,7 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 public class TriageActivity extends AppCompatActivity {
+
+    /**
+     * The {@link Tracker} used to record screen views.
+     */
+    private Tracker mTracker;
+
     Cursor cursor;
     ReviewsAdapter adapter;
     private RecyclerView rvReviews;
@@ -20,6 +29,18 @@ public class TriageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_triage);
+
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
+        // [START screen_view_hit]
+        Log.i(TAG, "Setting screen name: " + TAG);
+        mTracker.setScreenName(TAG);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        // [END screen_view_hit]
+
         rvReviews = (RecyclerView) findViewById(R.id.reviews);
 
         itemTouchHelper = new ItemTouchHelper(simpleCallbackTouchHelper);

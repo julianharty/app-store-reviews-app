@@ -14,8 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import static android.provider.OpenableColumns.DISPLAY_NAME;
 import static com.commercetest.reviewreviews.DatabaseConstants.*;
@@ -33,7 +37,14 @@ Next steps for this class include:
  */
 
 public class LoadReviewsActivity extends AppCompatActivity {
+
+    /**
+     * The {@link Tracker} used to record screen views.
+     */
+    private Tracker mTracker;
+
     private static final String TAG = "LoadReviews";
+    private long timeStarted;
     private static final int FIND_FILE_REQUEST_CODE = 8888;
     private Button findFileToLoadButton;
     private Button launchWebBrowser;
@@ -43,6 +54,11 @@ public class LoadReviewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load_reviews);
+
+        // Obtain the shared Tracker instance.
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+
         messageBox = (TextView) findViewById(R.id.results_of_file_load);
         findFileToLoadButton = (Button) findViewById(R.id.findFileToLoad);
         findFileToLoadButton.setOnClickListener(new View.OnClickListener() {
@@ -67,17 +83,27 @@ public class LoadReviewsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/comma-separated-values");
+        timeStarted = System.currentTimeMillis();
         startActivityForResult(intent, FIND_FILE_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        long timeWaitedForUserReturnedToApp = System.currentTimeMillis() - timeStarted;
+
+        HitBuilders.TimingBuilder waitingForUser = new HitBuilders.TimingBuilder()
+                .setVariable("FilePicker")
+                .setValue(timeWaitedForUserReturnedToApp);
 
         if (requestCode != FIND_FILE_REQUEST_CODE) return;
 
         if (resultCode != Activity.RESULT_OK) {
+            waitingForUser.setLabel("Cancelled");
+            mTracker.send(waitingForUser.build());
             Log.i(TAG, "User did not select a file. Possible usability problem?");
         } else {
+            waitingForUser.setLabel("OK");
+            mTracker.send(waitingForUser.build());
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
@@ -85,7 +111,10 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 int recordsAdded = 0;
                 int recordsRejected = 0;
                 String message;
+                HitBuilders.TimingBuilder fileLoadData = new HitBuilders.TimingBuilder();
+                fileLoadData.setVariable("FileImport");
                 try {
+                    timeStarted = System.currentTimeMillis();
                     InputStream inputStream = getContentResolver().openInputStream(uri);
                     final int BYTES_TO_READ = 3;
                     byte[] buffer = new byte[BYTES_TO_READ];
@@ -122,6 +151,11 @@ public class LoadReviewsActivity extends AppCompatActivity {
                     message = ufe.getLocalizedMessage();
                     messageBox.setText(message);
                 }
+                long loadTook = (System.currentTimeMillis() - timeStarted);
+                fileLoadData.setValue(loadTook);
+                fileLoadData.setLabel("CompletedOK");
+                mTracker.set("FileLoad", Long.toString(loadTook));
+                mTracker.send(fileLoadData.build());
             }
         }
     }

@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "799686413608",
+    "project_id": "reviewreviewsga"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799686413608:android:c0de4b165efb9947",
+        "android_client_info": {
+          "package_name": "com.commercetest.reviewreviews"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnwvIuoY9gUbdTdR0fPpmlvoIgRnwWcCs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-85370017-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
