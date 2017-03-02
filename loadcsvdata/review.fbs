@@ -1,0 +1,21 @@
+namespace review;
+
+table Review {
+  package_name:string (required);
+  app_version_code:int;
+  app_version_name:string;
+  reviewer_language:string (required);
+  device:string (required);
+  review_submit_date_and_time:string (required);
+  review_submit_millis_since_epoch:long;
+  review_last_update_date_and_time:string (required);
+  review_last_update_millis_since_epoch:long;
+  review_star_rating:int;
+  review_title:string;
+  review_text:string;
+  developer_reply_data_and_time:string;
+  developer_reply_millis_since_epoch:long;
+  developer_reply_text:string;
+  review_link:string;
+}
+
