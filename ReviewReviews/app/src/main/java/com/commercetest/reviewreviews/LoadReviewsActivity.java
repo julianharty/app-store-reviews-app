@@ -82,7 +82,9 @@ public class LoadReviewsActivity extends AppCompatActivity {
     public void findReviewsToLoad() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/comma-separated-values");
+        String [] mimeTypes = {"text/csv", "text/comma-separated-values"};
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         timeStarted = System.currentTimeMillis();
         startActivityForResult(intent, FIND_FILE_REQUEST_CODE);
     }
