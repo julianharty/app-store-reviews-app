@@ -58,6 +58,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
         // Obtain the shared Tracker instance.
         AnalyticsApplication application = (AnalyticsApplication) getApplication();
         mTracker = application.getDefaultTracker();
+        mTracker.setScreenName(TAG);
 
         messageBox = (TextView) findViewById(R.id.results_of_file_load);
         findFileToLoadButton = (Button) findViewById(R.id.findFileToLoad);
@@ -79,7 +80,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
 
     }
 
-    public void findReviewsToLoad() {
+    private void findReviewsToLoad() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         String [] mimeTypes = {"text/csv", "text/comma-separated-values"};
@@ -115,6 +116,7 @@ public class LoadReviewsActivity extends AppCompatActivity {
                 String message;
                 HitBuilders.TimingBuilder fileLoadData = new HitBuilders.TimingBuilder();
                 fileLoadData.setVariable("FileImport");
+                fileLoadData.setCategory("Performance");
                 try {
                     timeStarted = System.currentTimeMillis();
                     InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -163,6 +165,17 @@ public class LoadReviewsActivity extends AppCompatActivity {
     }
 
     private boolean recordFileImport(SQLiteDatabase db, ContentValues importDetails) {
+        // First tell Google Analytics
+        final String fileName = importDetails.getAsString(FILE_IDENTIFIER);
+        HitBuilders.EventBuilder fileImportValues = new HitBuilders.EventBuilder()
+                .setAction("FileImport")
+                .setCategory("LOCAL")
+                .setLabel(fileName)
+                .setValue(1)
+                .setCustomDimension(1, fileName);
+        mTracker.send(fileImportValues.build());
+
+        // Now record the full details locally.
         final long rowId = db.insert(FILE_IMPORT, null, importDetails);
         return (rowId != -1);
     }
