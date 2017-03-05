@@ -4,7 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/load_reviews"
-        android:title="Load Reviews"
+        android:title="@string/loadReviews"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/triage"
+        android:title="@string/triage"
         app:showAsAction="ifRoom"
         />
     <item
@@ -15,17 +20,12 @@
     <item
         android:id="@+id/add_review"
         android:title="@string/add_review"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/delete_all_reviews"
-        android:title="Delete All Reviews"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/triage"
-        android:title="@string/triage"
-        app:showAsAction="ifRoom"
+        android:title="@string/delete_all_reviews"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/settings"

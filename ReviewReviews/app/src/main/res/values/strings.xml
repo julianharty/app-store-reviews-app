@@ -21,11 +21,14 @@
         <b>For now, please use a web browser, not the Google Drive app to download the files</b>
         , otherwise you may end up mired in complexity.
     </string>
+    <string name="delete_all_reviews">Delete All Reviews</string>
     <string name="download_reviews">Download Reviews</string>
     <string name="download_reviews_url">https://drive.google.com/open?id=0BzdiJKOOxhNlTjdpNGdSQnZoQmc</string>
-    <string name="loadButtonText">Find local file to import</string>
     <string name="loadAnotherFileText">Find another local file to import</string>
+    <string name="loadButtonText">Find local file to import</string>
+    <string name="loadReviews">Load Reviews</string>
     <string name="no_reviews_yet_message">There are no reviews loaded. Please load some to get started.</string>
+    <string name="none">(none)</string>
     <string name="project_home">https://github.com/julianharty/app-store-reviews-app</string>
     <string name="result_heading">Result</string>
     <string name="settings">Settings</string>

@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="64dp">
-    <TextView
-        android:id="@+id/review_text"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        />
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/review_rating"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0"
+            />
+        <TextView
+            android:id="@+id/review_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_toRightOf="@id/review_rating"
+            android:gravity="top"
+            android:paddingTop="2dp"
+            />
+        <TextView
+            android:id="@+id/review_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/review_title"
+            android:layout_toRightOf="@id/review_rating"
+            />
+
+    </RelativeLayout>
+
+
     <Button
         android:id="@+id/undo_button"
         android:layout_width="wrap_content"
