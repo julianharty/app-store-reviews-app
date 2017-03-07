@@ -36,4 +36,5 @@
     <string name="triage">Triage Reviews</string>
     <string name="total_reviews">Total Reviews</string>
     <string name="undo">Undo</string>
+    <string name="unknown_device">(unknown device)</string>
 </resources>

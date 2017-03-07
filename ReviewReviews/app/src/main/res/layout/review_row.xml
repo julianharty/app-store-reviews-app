@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="64dp">
+    android:layout_height="80dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,21 +19,29 @@
             android:id="@+id/review_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:layout_toRightOf="@id/review_rating"
             android:gravity="top"
-            android:paddingTop="2dp"
+            android:paddingTop="1dp"
             />
         <TextView
             android:id="@+id/review_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="2dp"
             android:layout_below="@id/review_title"
+            android:layout_toRightOf="@id/review_rating"
+            />
+        <TextView
+            android:id="@+id/device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_below="@id/review_text"
             android:layout_toRightOf="@id/review_rating"
             />
 
     </RelativeLayout>
-
 
     <Button
         android:id="@+id/undo_button"
@@ -42,6 +50,7 @@
         android:text="@string/undo"
         android:textAllCaps="true"
         android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
         android:layout_gravity="end|center_vertical"
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         />

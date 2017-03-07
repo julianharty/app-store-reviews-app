@@ -166,6 +166,7 @@ public class ReviewsDatabaseHelper extends SQLiteOpenHelper {
                 final long rowIdForStatus = db.insert(REVIEW_STATUS, null, statusValues);
             }
             db.setTransactionSuccessful();
+
         } finally {
             db.endTransaction();
         }

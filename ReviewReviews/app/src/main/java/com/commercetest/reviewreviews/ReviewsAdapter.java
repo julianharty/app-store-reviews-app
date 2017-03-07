@@ -25,6 +25,7 @@ class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder>
         TextView reviewRatingView;
         TextView reviewTextView;
         TextView reviewTitleView;
+        TextView reviewDevice;
         Button undoButton;
 
         ViewHolder(View itemView) {
@@ -33,6 +34,7 @@ class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder>
             reviewRatingView = (TextView) itemView.findViewById(R.id.review_rating);
             reviewTextView = (TextView) itemView.findViewById(R.id.review_text);
             reviewTitleView = (TextView) itemView.findViewById(R.id.review_title);
+            reviewDevice = (TextView) itemView.findViewById(R.id.device);
             undoButton = (Button) itemView.findViewById(R.id.undo_button);
         }
     }
@@ -59,12 +61,13 @@ class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder>
         mCursor.moveToPosition(position);
         String reviewTitle = mCursor.getString(mCursor.getColumnIndexOrThrow("review_title"));
         String reviewText = mCursor.getString(mCursor.getColumnIndexOrThrow("review_text"));
+        String device = mCursor.getString(mCursor.getColumnIndexOrThrow("device"));
         int rating = mCursor.getInt(mCursor.getColumnIndexOrThrow("star_rating"));
         int id = mCursor.getInt(mCursor.getColumnIndexOrThrow("_id"));
 
         // Update the row with the details from this review
         TextView tempView = holder.reviewRatingView;
-        tempView.setText(Integer.toString(rating));
+        tempView.setText(Integer.toString(rating) +  " *");
 
         tempView = holder.reviewTitleView;
 
@@ -80,7 +83,13 @@ class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder>
         } else {
             tempView.setText(reviewText);
         }
-        
+        tempView = holder.reviewDevice;
+        if ((device == null) ||device.length() == 0) {
+            tempView.setText(R.string.unknown_device);
+        } else {
+            tempView.setText(device);
+        }
+
         // Hide the undo button for now, once we've located it.
         Button button = holder.undoButton;
         button.setVisibility(View.INVISIBLE);
